@@ -42,6 +42,15 @@ dependencies:
 
 
 
+  # fire base
+  firebase_core:
+  firebase_auth:
+  cloud_firestore:
+  firebase_storage:
+
+
+
+
 
 
 
