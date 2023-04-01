@@ -127,65 +127,65 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 height: 10,
               ),
               // كم عدد الساعات
-              Box(
-                height: 40,
-                style: AppTextStyles.name,
-                text: 'كم عدد الأيام على مدار الاسبوع؟  ',
-                color: AppColors.pink,
-                dirction: Alignment.center,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: const Text('عدد الأيام على مدار الأسبوع'),
-                      items: days
-                          .map((days) => DropdownMenuItem<String>(
-                                value: days,
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    days,
-                                    style: AppTextStyles.name,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      value: daysSelected,
-                      onChanged: (value) {
-                        setState(() {
-                          daysSelected = value as String;
-                        });
-                      },
-                      buttonStyleData: ButtonStyleData(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: AppColors.black,
-                          ),
-                          color: AppColors.white,
-                        ),
-                      ),
-                      dropdownStyleData: const DropdownStyleData(
-                          maxHeight: 200,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: Radius.circular(40),
-                          )),
-                    ),
-                  ),
-                ),
-              ),
+              // Box(
+              //   height: 40,
+              //   style: AppTextStyles.name,
+              //   text: 'كم عدد الأيام على مدار الاسبوع؟  ',
+              //   color: AppColors.pink,
+              //   dirction: Alignment.center,
+              // ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+              //   child: Directionality(
+              //     textDirection: TextDirection.rtl,
+              //     child: DropdownButtonHideUnderline(
+              //       child: DropdownButton2(
+              //         isExpanded: true,
+              //         hint: const Text('عدد الأيام على مدار الأسبوع'),
+              //         items: days
+              //             .map((days) => DropdownMenuItem<String>(
+              //                   value: days,
+              //                   child: Container(
+              //                     alignment: Alignment.centerRight,
+              //                     child: Text(
+              //                       days,
+              //                       style: AppTextStyles.name,
+              //                     ),
+              //                   ),
+              //                 ))
+              //             .toList(),
+              //         value: daysSelected,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             daysSelected = value as String;
+              //           });
+              //         },
+              //         buttonStyleData: ButtonStyleData(
+              //           padding: const EdgeInsets.symmetric(
+              //               horizontal: 10, vertical: 5),
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(14),
+              //             border: Border.all(
+              //               color: AppColors.black,
+              //             ),
+              //             color: AppColors.white,
+              //           ),
+              //         ),
+              //         dropdownStyleData: const DropdownStyleData(
+              //             maxHeight: 200,
+              //             padding: EdgeInsets.symmetric(horizontal: 10),
+              //             scrollbarTheme: ScrollbarThemeData(
+              //               radius: Radius.circular(40),
+              //             )),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               // عدد الساعات
-              const SizedBox(
-                height: 10,
-              ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
               // ما اليوم و الساعة
               Box(
                 height: 40,
