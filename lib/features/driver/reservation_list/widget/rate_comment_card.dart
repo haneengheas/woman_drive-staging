@@ -4,11 +4,11 @@ import '../../../../shared/components/components.dart';
 import '../../../../shared/components/constants.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/styles.dart';
+
 Future rating(
-    BuildContext context,
-    )
-{
-  return  showDialog(
+  BuildContext context,
+) {
+  return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -20,14 +20,12 @@ Future rating(
           //insetPadding: const EdgeInsets.all(10),
           shape: const RoundedRectangleBorder(
               side: BorderSide(
-                //color: AppColors.pink,
-              ),
+                  //color: AppColors.pink,
+                  ),
               borderRadius: BorderRadius.all(Radius.circular(15))),
           content: SizedBox(
             width: width(context, 1),
             child: SingleChildScrollView(
-
-
               child: Column(
                 children: [
                   Row(
@@ -44,24 +42,22 @@ Future rating(
                           direction: Axis.horizontal,
                           allowHalfRating: true,
                           itemCount: 5,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 2),
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 2),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: Colors.amber,
                           ),
-                          onRatingUpdate: (rating) {
-                          },
+                          onRatingUpdate: (rating) {},
                         ),
                       ),
                     ],
                   ),
-
                   TextFieldTemplate(
-                    hintText: 'شاركنا برايك في المدرب',
+                    hintText: 'شاركينا برأيك في المدربة',
                     icon: null,
                     lines: 6,
                   ),
-
                 ],
               ),
             ),
@@ -70,21 +66,19 @@ Future rating(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-
                 CustomButtonTemplate(
                   width: width(context, 3),
-                  color: AppColors. yellow,
+                  color: AppColors.yellow,
                   height: 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   text: 'ارسال',
                   textStyle: AppTextStyles.button,
                 ),
-
               ],
             ),
-
           ],
         );
       });
-
 }

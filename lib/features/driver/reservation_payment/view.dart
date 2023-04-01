@@ -18,6 +18,7 @@ class ReservationPaymentScreen extends StatefulWidget {
 
 class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
   bool fill = false;
+  bool checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +26,8 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'حجز موعد ',
-
+            'تأكيد حجز الموعد ',
           ),
-
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(
@@ -37,16 +36,16 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 // صورة البروفايل + الاسم
                 ProfileImage(
-                  onTap: (){},
+                  onTap: () {},
                   image: female,
-                  role: 'مدرب قيادة',
-                  name:  '  ويجدان',
+                  role: 'مدربة قيادة',
+                  name: '  وجدان',
                 ),
                 const SizedBox(
                   height: 20,
@@ -70,7 +69,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       width: 30,
                     ),
                     Header(
-                     text: '  المدة: ساعتان',
+                      text: '  المدة: ساعتان',
                       style: AppTextStyles.w400.apply(
                         color: AppColors.greyDark,
                       ),
@@ -187,7 +186,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                           text1: 'اتمام عملية الدفع ',
                           onPressed: () {
                             showModalBottomSheet(
-                              backgroundColor: AppColors.pinkPowder,
+                                backgroundColor: AppColors.pinkPowder,
                                 context: context,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
@@ -195,72 +194,97 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                                   ),
                                 ),
                                 builder: (BuildContext context) {
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 20),
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          Center(
-                                              child: Text(
-                                            'اتمام عملية الدفع ',
-                                            style: AppTextStyles.boldtitles,
-                                          )),
-                                          // رقم البطاقة الائتمانية
-                                          TextFieldTemplate(
-                                            hintText: 'رقم البطاقة الائتمانية',
-                                            icon: Icons.credit_card_outlined,
-                                          ),
-                                          // الباسورد + تاريخ الانتهاء
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: width(context, 2.2),
-                                                height: 100,
-                                                //margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                child: TextFieldTemplate(
-                                                  hintText: 'تاريخ الانتهاء',
-                                                  icon: Icons.date_range,
+                                  return StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter mystate) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 20),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Center(
+                                                child: Text(
+                                              'اتمام عملية الدفع ',
+                                              style: AppTextStyles.boldtitles,
+                                            )),
+                                            // رقم البطاقة الائتمانية
+                                            TextFieldTemplate(
+                                              hintText:
+                                                  'رقم البطاقة الائتمانية',
+                                              icon: Icons.credit_card_outlined,
+                                            ),
+                                            // الباسورد + تاريخ الانتهاء
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: width(context, 2.2),
+                                                  height: 100,
+                                                  //margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                  child: TextFieldTemplate(
+                                                    hintText: 'تاريخ الانتهاء',
+                                                    icon: Icons.date_range,
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: width(context, 2.2),
-                                                height: 100,
-                                                //margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                child: TextFieldTemplate(
-                                                  hintText: 'الرقم السري',
-                                                  icon: Icons.lock,
+                                                SizedBox(
+                                                  width: width(context, 2.2),
+                                                  height: 100,
+                                                  //margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                  child: TextFieldTemplate(
+                                                    hintText: 'الرقم السري',
+                                                    icon: Icons.lock,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          TextFieldTemplate(
-                                            hintText: 'الاسم علي البطاقة',
-                                            icon: Icons.person,
-                                          ),
-                                          CustomButtonTemplate(
-                                            height: 40,
-                                            width: width(context, 3),
-                                            color: AppColors.yellow,
-                                            text: 'اتمام العملية',
-                                            onPressed: () => {
-                                              setState(() {
-                                                fill = true;
-                                              }),
-                                              Navigator.pop(context)
-                                            },
-                                            textStyle: AppTextStyles.brButton,
-                                          )
-                                        ],
+                                              ],
+                                            ),
+                                            TextFieldTemplate(
+                                              hintText: 'الاسم علي البطاقة',
+                                              icon: Icons.person,
+                                            ),
+                                            Row(
+                                              textDirection: TextDirection.rtl,
+                                              children: [
+                                                Checkbox(
+                                                    activeColor:
+                                                        AppColors.yellow,
+                                                    value: checked,
+                                                    onChanged: (value) {
+                                                      mystate(() {
+                                                        checked = value!;
+                                                      });
+                                                    }),
+                                                Text(
+                                                  'حفظ المعلومات',
+                                                  style: AppTextStyles.sName,
+                                                ),
+                                              ],
+                                            ),
+
+                                            CustomButtonTemplate(
+                                              height: 40,
+                                              width: width(context, 3),
+                                              color: AppColors.yellow,
+                                              text: 'اتمام العملية',
+                                              onPressed: () => {
+                                                setState(() {
+                                                  fill = true;
+                                                }),
+                                                Navigator.pop(context)
+                                              },
+                                              textStyle: AppTextStyles.brButton,
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  });
                                 });
                           })
                       : ButtonTemplate(
                           color: AppColors.yellow,
                           text1: 'عرض الحجز',
-                          onPressed: ()=> navigateTo(context, const ReservationListScreen())),
+                          onPressed: () => navigateTo(
+                              context, const ReservationListScreen())),
                 )
               ],
             ),

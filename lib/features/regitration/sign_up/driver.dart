@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:woman_drive/features/regitration/insructions/view.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/styles/colors.dart';
-import '../../driver/home/view.dart';
 
 class DriverScreen extends StatefulWidget {
   const DriverScreen({Key? key}) : super(key: key);
@@ -20,19 +20,18 @@ class _DriverScreenState extends State<DriverScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'انشاء حساب كسائق',
+            'تسجيل كمتدربة',
           ),
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(
                 Icons.arrow_back_ios_outlined,
-
               )),
         ),
         body: Directionality(
             textDirection: TextDirection.rtl,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 children: [
                   const SizedBox(
@@ -43,7 +42,7 @@ class _DriverScreenState extends State<DriverScreen> {
                     icon: Icons.person,
                   ),
                   TextFieldTemplate(
-                    hintText: 'البريد الالكتروني',
+                    hintText: 'البريد الإلكتروني',
                     icon: Icons.mail_outlined,
                   ),
                   TextFieldTemplate(
@@ -52,7 +51,7 @@ class _DriverScreenState extends State<DriverScreen> {
                   ),
                   TextFieldTemplate(
                     hintText: 'العمر',
-                    icon: Icons.mail_outlined,
+                    icon: Icons.calendar_month,
                   ),
                   TextFieldTemplate(
                     hintText: 'رقم الهاتف',
@@ -69,8 +68,8 @@ class _DriverScreenState extends State<DriverScreen> {
                   Center(
                     child: ButtonTemplate(
                       color: AppColors.yellow,
-                      onPressed: () =>
-                          navigateTo(context, const DriverHomeScreen()),
+                      onPressed: () => navigateTo(
+                          context,  const InstructionsScreen(type: 'driver')),
                       minwidth: width(context, 2),
                       text1: 'تسجيل ',
                     ),

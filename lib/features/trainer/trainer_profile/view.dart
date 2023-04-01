@@ -1,5 +1,7 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:woman_drive/features/trainer/trainer_profile/widget/edit_profile.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
 
@@ -16,15 +18,48 @@ class TrainerInfoScreen extends StatefulWidget {
 }
 
 class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime? _selectedDay;
+  List<String> hours = [
+    '9:00 Am',
+    '10:00 Am',
+    '11:00 Am',
+    '12:00 Pm',
+    '1:00 Pm',
+    '2:00 Pm',
+    '3:00 Pm',
+    '4:00 Pm',
+    '5:00 Pm',
+    '6:00 Pm',
+    '7:00 Pm',
+    '8:00 Pm',
+    '9:00 Pm',
+    '10:00 Pm',
+  ];
+  List<String> selectedHours = [];
+  bool _predicate(DateTime day) {
+    if ((day.isAfter(DateTime(2023, 3, 1)) &&
+        day.isBefore(DateTime(2023, 4, 15)))) {
+      return true;
+    }
 
+    if ((day.isAfter(DateTime(2023, 2, 10)) &&
+        day.isBefore(DateTime(2023, 3, 15)))) {
+      return true;
+    }
+    // if ((day.isAfter(DateTime(2023, 4, 5)) &&
+    //     day.isBefore(DateTime(2023, 4, 17)))) {
+    //   return true;
+    // }
+
+    return false;
+  }
+
+  List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'الملف الشخصي ',
+          'حسابي',
         ),
         centerTitle: true,
         leading: IconButton(
@@ -32,14 +67,7 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
             icon: const Icon(
               Icons.arrow_back_ios_outlined,
             )),
-        actions: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.logout,
-                size: 30,
-              )),
-        ],
+
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -64,7 +92,7 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
                         height: 10,
                       ),
                       Text(
-                        'مدرب قيادة',
+                        'مدربة قيادة',
                         style: AppTextStyles.name,
                       ),
                     ],
@@ -72,18 +100,23 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
                   const SizedBox(
                     width: 15,
                   ),
-                  Stack(alignment: Alignment.bottomLeft, children: const [
-                    CircleAvatar(
+                  Stack(alignment: Alignment.bottomLeft, children: [
+                    const CircleAvatar(
                       backgroundImage: AssetImage(female),
                       radius: 40,
                     ),
                     CircleAvatar(
                         radius: 15,
                         backgroundColor: AppColors.pink,
-                        child: Icon(
-                          Icons.edit,
-                          color: AppColors.black,
-                          size: 20,
+                        child: Center(
+                          child: IconButton(
+                            color: Colors.yellow,
+                            onPressed: () {
+                              editTrainerProfile(context);
+                            },
+                            icon: const Icon(Icons.edit,
+                                color: AppColors.black, size: 15),
+                          ),
                         )),
                   ]),
                 ],
@@ -122,94 +155,120 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
             Box(
               height: 40,
               style: AppTextStyles.name,
-              text: 'الاوقات المتاحة',
+              text: 'الأيام المتاحة',
               color: AppColors.pink,
               dirction: Alignment.center,
             ),
             // التقويم
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5),
-              child: TableCalendar(
-                rowHeight: 30,
-                calendarStyle: CalendarStyle(
-                    defaultTextStyle: AppTextStyles.smTitles,
-                    weekNumberTextStyle: AppTextStyles.smTitles,
-                    selectedDecoration: const BoxDecoration(
-                      color: AppColors.red,
-                      shape: BoxShape.circle,
-                    )),
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: DateTime.now(),
-                selectedDayPredicate: (day) {
-                  return isSameDay(_selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDay = selectedDay;
-//
-                    // update `_focusedDay` here as well
-                  });
-                },
-                calendarFormat: _calendarFormat,
-                onFormatChanged: (format) {
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                },
-                onPageChanged: (focusedDay) {},
+              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+              child: CalendarDatePicker2(
+                config: CalendarDatePicker2Config(
+                    calendarType: CalendarDatePicker2Type.multi,
+                    selectedDayHighlightColor: AppColors.yellow,
+                    selectableDayPredicate: _predicate),
+                value: _multiDatePickerValueWithDefaultValue,
+                onValueChanged: (dates) => setState(
+                        () => _multiDatePickerValueWithDefaultValue = dates),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+
+
+
 
             // الساعة
-            SizedBox(
-              // height: 130,
-              width: width(context, 1.2),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10),
-                itemCount: clock.length,
-                scrollDirection: Axis.vertical,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      for (int i = 0; i < clock.length; i++) {
-                        if (clock[i]['isSelected'] == true) {
-                          setState(() {
-                            clock[i]['isSelected'] = false;
-                          });
-                        }
-                        setState(() {
-                          clock[index]['isSelected'] = true;
-                        });
-                      }
-                    },
-                    child: Container(
-                      //height: 20,
-                      //width: width(context, 3.5),
-                      alignment: Alignment.center,
-                      // margin: const EdgeInsets.symmetric(
-                      //     horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: clock[index]['isSelected']
-                              ? AppColors.pink
-                              : Colors.white,
-                          border: Border.all(color: AppColors.black),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(clock[index]['clock'],
-                          style: AppTextStyles.smTitles),
-                    ),
-                  );
+            // SizedBox(
+            //   // height: 130,
+            //   width: width(context, 1.2),
+            //   child: GridView.builder(
+            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 3,
+            //         childAspectRatio: 3,
+            //         crossAxisSpacing: 10,
+            //         mainAxisSpacing: 10),
+            //     itemCount: clock.length,
+            //     scrollDirection: Axis.vertical,
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     shrinkWrap: true,
+            //     itemBuilder: (context, index) {
+            //       return InkWell(
+            //         onTap: () {
+            //           for (int i = 0; i < clock.length; i++) {
+            //             if (clock[i]['isSelected'] == true) {
+            //               setState(() {
+            //                 clock[i]['isSelected'] = false;
+            //               });
+            //             }
+            //             setState(() {
+            //               clock[index]['isSelected'] = true;
+            //             });
+            //           }
+            //         },
+            //         child: Container(
+            //           //height: 20,
+            //           //width: width(context, 3.5),
+            //           alignment: Alignment.center,
+            //           // margin: const EdgeInsets.symmetric(
+            //           //     horizontal: 10, vertical: 10),
+            //           decoration: BoxDecoration(
+            //               color: clock[index]['isSelected']
+            //                   ? AppColors.pink
+            //                   : Colors.white,
+            //               border: Border.all(color: AppColors.black),
+            //               borderRadius: BorderRadius.circular(20)),
+            //           child: Text(clock[index]['clock'],
+            //               style: AppTextStyles.smTitles),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            Box(
+              height: 40,
+              style: AppTextStyles.name,
+              text: 'الساعات المتاحة',
+              color: AppColors.pink,
+              dirction: Alignment.center,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              child: DropDownMultiSelect(
+                options: hours,
+                selectedValues: selectedHours,
+                hint: const Text('اختر الساعات المتاحة بالنسبة لك'),
+                decoration: const InputDecoration(
+                    enabled: true,
+                    fillColor: AppColors.pink,
+                    filled: true,
+                    hintTextDirection: TextDirection.ltr,
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.pink, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.pink, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.pink, width: 1),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ))),
+                onChanged: (value) {
+                  if (kDebugMode) {
+                    print('selected hour $value');
+                  }
+                  setState(() {
+                    selectedHours = value;
+                  });
+                  if (kDebugMode) {
+                    print('you have selected $selectedHours this hour.');
+                  }
                 },
+                whenEmpty: '',
               ),
             ),
             const SizedBox(
@@ -224,16 +283,18 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
                   color: AppColors.pink,
                   height: 40,
                   onPressed: () {
-                    editTrainerProfile(context);
+                    Navigator.pop(context);
                   },
-                  text: 'تعديل',
+                  text: 'إلغاء',
                   textStyle: AppTextStyles.brButton,
                 ),
                 CustomButtonTemplate(
                   width: width(context, 3),
                   color: AppColors.yellow,
                   height: 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   text: 'تأكيد',
                   textStyle: AppTextStyles.brButton,
                 ),

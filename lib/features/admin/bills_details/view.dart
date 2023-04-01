@@ -18,7 +18,7 @@ class _BillsDetailsScreenState extends State<BillsDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'الحجوزات ',
+          ' عرض التفاصيل ',
         ),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),

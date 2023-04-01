@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/styles.dart';
 
-class DriverInstructionInfoCard extends StatelessWidget {
-  const DriverInstructionInfoCard({Key? key}) : super(key: key);
+class TrainerInstructionInfoCard extends StatelessWidget {
+  const TrainerInstructionInfoCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +17,12 @@ class DriverInstructionInfoCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'يقدم تطبيق قيادة المرأة مجموعة من الشروط و الأحكام التي ترتبط بشكل اساسي بسياسات  الحجز وشروط استخدام الخدمات',
+            'يقدم تطبيق قيادة المرأة مجموعة من الشروط و الاحكام التي ترتبط بشكل اساسي بسياسات  الحجز وشروط أستخدام الخدمات',
             style: AppTextStyles.name,
             textDirection: TextDirection.rtl,
           ),
           Text(
-            'يجب الموافقه كاملة على كافة السياسات والأحكام ',
+            'يجب الموافقه كاملة على كافة السياسات والاحكام ',
             style: AppTextStyles.name,
             textDirection: TextDirection.rtl,
           ),
@@ -96,11 +96,11 @@ class DriverInstructionInfoCard extends StatelessWidget {
             style: AppTextStyles.name,
             textDirection: TextDirection.rtl,
           ),
-          // Text(
-          //   '١٥- تحدث عملية الدفع بين المدرب والادمن عن طريق التحويل البنكي ، باحتساب معدل الدخل خلال الشهر الذي قدمه',
-          //   style: AppTextStyles.name,
-          //   textDirection: TextDirection.rtl,
-          // ),
+          Text(
+            '١٥- تحدث عملية الدفع بين المدرب والادمن عن طريق التحويل البنكي ، باحتساب معدل الدخل خلال الشهر الذي قدمه',
+            style: AppTextStyles.name,
+            textDirection: TextDirection.rtl,
+          ),
         ],
       ),
     );

@@ -19,7 +19,7 @@ class _AdminCommentScreenState extends State<AdminCommentScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'الشكاوي و التعليقات',
+            'شكاوى أو مقترحات ',
           ),
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
@@ -45,7 +45,7 @@ class _AdminCommentScreenState extends State<AdminCommentScreen> {
                  crossAxisAlignment: CrossAxisAlignment.end,
                  children: [
                    Box(
-                     text: 'المرسل : مني    تاريخ : 20/11/2022',
+                     text: 'المرسل : منى    تاريخ : 20/11/2022',
                      color: AppColors.pinkPowder2,
                      style: AppTextStyles.name,
                    ),
@@ -55,7 +55,7 @@ class _AdminCommentScreenState extends State<AdminCommentScreen> {
                      style: AppTextStyles.name,
                    ),
                    Box(
-                     text: 'التعليقات او الشكاوي التعليقات او الشكاوي التعليقات او الشكاوي ',
+                     text: 'التعليقات أو الشكاوى التعليقات أو الشكاوى التعليقات أو الشكاوى ',
                      color: AppColors.pinkPowder2,
                      style: AppTextStyles.name,
                    ),

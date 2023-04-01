@@ -17,7 +17,7 @@ class _NewTrainerInfoScreenState extends State<NewTrainerInfoScreen> {
 
       appBar: AppBar(
         title: const Text(
-          'طلب اللتحاق',
+          'طلب الالتحاق',
         ),
 
         leading: IconButton(
@@ -54,7 +54,7 @@ class _NewTrainerInfoScreenState extends State<NewTrainerInfoScreen> {
                     style: AppTextStyles.smTitles,
                   ),
                   Header(
-                    text: 'Wijdan@gmail.com : البريد الالكتروني',
+                    text:'البريد الإلكتروني : ' 'Wijdan@gmail.com ',
                     style: AppTextStyles.smTitles,
                   ),
                   Header(
@@ -99,7 +99,9 @@ class _NewTrainerInfoScreenState extends State<NewTrainerInfoScreen> {
                   width: width(context, 3),
                   color: AppColors.darkGreen,
                   height: 45,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   text: 'قبول',
                   textStyle: AppTextStyles.brButton,
                 ),
@@ -109,7 +111,10 @@ class _NewTrainerInfoScreenState extends State<NewTrainerInfoScreen> {
                   width: width(context, 3),
                   color: AppColors.darkRed,
                   height: 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                  },
                   text: 'رفض',
                   textStyle: AppTextStyles.brButton,
                 ),

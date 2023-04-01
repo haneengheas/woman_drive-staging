@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:woman_drive/features/regitration/insructions/widget/instruction_info_card.dart';
+import 'package:woman_drive/features/regitration/insructions/widget/trainer_instruction.dart';
 import 'package:woman_drive/features/trainer/home/view.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 
@@ -7,9 +9,12 @@ import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/styles.dart';
+import '../../driver/home/view.dart';
 
 class InstructionsScreen extends StatefulWidget {
-  const InstructionsScreen({Key? key}) : super(key: key);
+ final  String? type;
+
+ const  InstructionsScreen({required this.type, Key? key}) : super(key: key);
 
   @override
   State<InstructionsScreen> createState() => _InstructionsScreenState();
@@ -35,7 +40,9 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
             children: [
-              const InstructionInfoCard(),
+              widget.type == 'trainer'
+                  ? const TrainerInstructionInfoCard()
+                  : const DriverInstructionInfoCard(),
               Row(
                 textDirection: TextDirection.rtl,
                 children: [
@@ -48,7 +55,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                         });
                       }),
                   Text(
-                    'الموافقة علي الشروط و الاحكام ',
+                    'الموافقة على الشروط و الاحكام ',
                     style: AppTextStyles.name,
                   ),
                 ],
@@ -57,7 +64,16 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                   minwidth: width(context, 2),
                   color: AppColors.yellow,
                   text1: 'تسجيل',
-                  onPressed: () => navigateTo(context, const TrainerHomeScreen()))
+                  onPressed: () {
+                    if (kDebugMode) {
+                      print(widget.type);
+                    }
+                    if (widget.type == 'trainer') {
+                      navigateTo(context, const TrainerHomeScreen());
+                    } else {
+                      navigateTo(context, const DriverHomeScreen());
+                    }
+                  })
             ],
           ),
         ),

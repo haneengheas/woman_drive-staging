@@ -42,8 +42,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               children: [
                 // صورة البروفايل + الاسم
                 ProfileImage(
-                  name: 'ويجدان',
-                  role: 'مدرب قيادة',
+                  name: 'وجدان',
+                  role: 'مدربة قيادة',
                   image: female,
                   onTap: () {},
                 ),
@@ -68,8 +68,10 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           ),
                           Text(
                             '100 RS',
-                            style: AppTextStyles.w400.apply(
+                            style: AppTextStyles.w400.copyWith(
                               color: AppColors.greyDark,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                           const SizedBox(
@@ -204,15 +206,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, right: 20),
-                      child: Text(
-                        ' $showRating',
-                        style: AppTextStyles.name.apply(
-                          color: AppColors.greyDark,
-                        ),
-                      ),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 5, right: 20),
+                    //   child: Text(
+                    //     ' $showRating',
+                    //     style: AppTextStyles.name.apply(
+                    //       color: AppColors.greyDark,
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
                 const Divider(
@@ -289,17 +291,17 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
 List<Map<String, dynamic>> comment = [
   {
-    'name': 'مني',
+    'name': 'منى',
     'data': '20/1/2023',
     'comment': 'اسلوبها ممتاز و تعاملها سلس '
   },
   {
-    'name': 'ايمان',
+    'name': 'إيمان',
     'data': '12/12/2022',
     'comment': 'اسلوبها ممتاز و تعاملها سلس و ذات بال طويل  '
   },
   {
-    'name': 'مني',
+    'name': 'منى',
     'data': '20/1/2023',
     'comment': 'اسلوبها ممتاز و تعاملها سلس '
   },

@@ -43,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ButtonTemplate(
                     minwidth: width(context, 1.7),
                     color: AppColors.yellow,
-                    text1: 'تسجيل كمدرب قيادة',
+                    text1: 'تسجيل كمدربة قيادة',
                     onPressed: () =>
                         navigateTo(context, const DrivingInstructorScreen())),
                 const SizedBox(
@@ -53,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ButtonTemplate(
                     minwidth: width(context, 1.7),
                     color: AppColors.yellow,
-                    text1: 'تسجيل كسائق',
+                    text1: 'تسجيل كمتدربة',
                     onPressed: () => navigateTo(context, const DriverScreen())),
               ],
             ),

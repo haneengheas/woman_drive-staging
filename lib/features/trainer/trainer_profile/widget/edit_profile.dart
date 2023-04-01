@@ -52,18 +52,12 @@ Future editTrainerProfile(
                   TextFieldTemplate(
                     hintText: 'رقم الرخصة',
                   ),
-                  TextFieldTemplate(
-                    hintText: 'نوع السيارة',
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'رقم اللوحة',
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'عمر المتدربين',
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'السعر',
-                  ),
+                  // TextFieldTemplate(
+                  //   hintText: 'نوع السيارة',
+                  // ),
+                  // TextFieldTemplate(
+                  //   hintText: 'رقم اللوحة',
+                  // ),
                 ],
               ),
             ),

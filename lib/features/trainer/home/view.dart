@@ -6,6 +6,7 @@ import '../../../shared/components/constants.dart';
 import '../../../shared/components/navigator.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/images.dart';
+import '../../regitration/login/view.dart';
 import '../reservation/view.dart';
 import '../trainer_profile/view.dart';
 
@@ -21,7 +22,21 @@ class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title:  const Text(
+            'مرحبا بك ',
+          ),
+          leading: const Text(''),
+          actions: [
 
+            IconButton(
+                onPressed: () => navigateTo(context, const LoginScreen()),
+                icon: const Icon(
+                  Icons.logout,
+                  size: 30,
+                )),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -32,15 +47,15 @@ class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
               ProfileImage(
                 onTap: null,
                 image: female,
-                role: 'مدرب قيادة',
-                name: ' مرحبا بك , ريناد محمد ',
+                role: 'مدربة قيادة',
+                name: ' ريناد محمد ',
               ),
               const Divider(
                 color: AppColors.black,
                 height: 5,
               ),
               SizedBox(
-                height: height(context, 5),
+                height: height(context, 7),
               ),
               ButtonTemplate(
                 color: AppColors.yellow,

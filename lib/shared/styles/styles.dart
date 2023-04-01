@@ -9,6 +9,8 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 25,
   );
+  static TextStyle w400b =
+      GoogleFonts.tajawal(fontWeight: FontWeight.bold, fontSize: 14);
 
   /// - weight: w300
   /// - family: cairo
@@ -46,8 +48,7 @@ abstract class AppTextStyles {
   static const TextStyle w900 = TextStyle(fontWeight: FontWeight.w900);
 
   static TextStyle button = GoogleFonts.tajawal(
-      fontSize: 22
-      , color: AppColors.white, fontWeight: FontWeight.w600);
+      fontSize: 22, color: AppColors.white, fontWeight: FontWeight.w600);
 
   static TextStyle name = GoogleFonts.tajawal(
       fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600);

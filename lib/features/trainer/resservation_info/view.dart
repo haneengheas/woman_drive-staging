@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:woman_drive/shared/components/constants.dart';
-
 import '../../../shared/components/components.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/images.dart';
 import '../../../shared/styles/styles.dart';
+
 class ReservationInFoScreen extends StatefulWidget {
-  const ReservationInFoScreen({Key? key}) : super(key: key);
+ final  String? type;
+
+ const  ReservationInFoScreen({required this.type, Key? key}) : super(key: key);
 
   @override
   State<ReservationInFoScreen> createState() => _ReservationInFoScreenState();
@@ -20,9 +22,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
         appBar: AppBar(
           title: const Text(
             'تفاصيل الحجز',
-
           ),
-
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(
@@ -30,17 +30,16 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
               )),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // صورة البروفايل + الاسم
               ProfileImage(
-                onTap: (){},
+                onTap: () {},
                 image: female,
                 name: 'ريماس محمد',
-                role:  'سائق',
+                role: 'متدربة',
               ),
               const SizedBox(
                 height: 10,
@@ -153,7 +152,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'الاجمالي ',
+                    'الاجمالى ',
                     style: AppTextStyles.smTitles,
                   ),
                   Text(
@@ -174,31 +173,36 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                 height: 40,
               ),
 
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButtonTemplate(
-                    onPressed: (){},
-                    textStyle: AppTextStyles.button,
-                    color: AppColors.darkGreen,
-                    text: 'قبول',
-                    width: width(context, 3),
-                    height: 40,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  CustomButtonTemplate(
-                    onPressed: (){},
-                    textStyle: AppTextStyles.button,
-                    color: AppColors.darkRed,
-                    text: 'رفض',
-                    width: width(context, 3),
-                    height: 40,
-                  ),
-                ],
-              )
+              widget.type == 'new'
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButtonTemplate(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          textStyle: AppTextStyles.button,
+                          color: AppColors.darkGreen,
+                          text: 'قبول',
+                          width: width(context, 3),
+                          height: 40,
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        CustomButtonTemplate(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          textStyle: AppTextStyles.button,
+                          color: AppColors.darkRed,
+                          text: 'رفض',
+                          width: width(context, 3),
+                          height: 40,
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),

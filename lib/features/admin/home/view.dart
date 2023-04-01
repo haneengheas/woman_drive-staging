@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woman_drive/features/regitration/login/view.dart';
 import 'package:woman_drive/shared/styles/images.dart';
 
 import '../../../shared/components/components.dart';
@@ -28,7 +29,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         actions: [
 
           IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => navigateTo(context, const LoginScreen()),
               icon: const Icon(
                 Icons.logout,
                 size: 30,
@@ -60,14 +61,14 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 color: AppColors.pink,
                 onPressed: () => navigateTo(context, const CommentListScreen()),
                 minwidth: width(context, 1.7),
-                text1: 'شكاوي او مقترحات  ',
+                text1: 'شكاوى أو مقترحات  ',
               ),
               ButtonTemplate(
                 color: AppColors.yellow,
                 onPressed: () =>
                     navigateTo(context, const BillsScreen()),
                 minwidth: width(context, 1.7),
-                text1: ' فواتير مدربي القيادة',
+                text1: ' فواتير مدربين القيادة',
               ),
               ButtonTemplate(
                 color: AppColors.pink,

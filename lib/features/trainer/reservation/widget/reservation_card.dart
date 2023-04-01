@@ -8,16 +8,19 @@ import '../../../../shared/components/components.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/images.dart';
 import '../../../../shared/styles/styles.dart';
+
 class ReservationCard extends StatelessWidget {
-  const ReservationCard({Key? key}) : super(key: key);
+   final String? type;
+
+ const ReservationCard({required this.type, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return             InkWell(
-      onTap: () => navigateTo(context, const ReservationInFoScreen()),
+    return InkWell(
+      onTap: () => navigateTo(context,  ReservationInFoScreen(type: type,)),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: AppColors.pink,
@@ -35,7 +38,7 @@ class ReservationCard extends StatelessWidget {
             ),
             // الاسم + التاريخ+ التقييم + الايميل
             SizedBox(
-              width: width(context, 1.8),
+              width: width(context, 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -48,21 +51,24 @@ class ReservationCard extends StatelessWidget {
                     '20 October 2023',
                     style: AppTextStyles.w400s,
                   ),
-                  RatingBar.builder(
-                    textDirection: TextDirection.rtl,
-                    initialRating: 3,
-                    itemSize: 20,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    ignoreGestures: true,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 2),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {},
-                  ),
+                  type == 'end'
+                      ? RatingBar.builder(
+                          textDirection: TextDirection.rtl,
+                          initialRating: 3,
+                          itemSize: 20,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          ignoreGestures: true,
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 2),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        )
+                      : const SizedBox(),
                   Box(
                     text: 'RemasMohamed@gmail.com',
                     color: AppColors.yellow,
@@ -77,25 +83,31 @@ class ReservationCard extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   backgroundColor: AppColors.darkGreen,
-                  radius: 15,
-                  child: Icon(
-                    Icons.check,
-                    color: AppColors.white,
-                  ),
+                  radius: 10,
+                  child: Icon(Icons.check, color: AppColors.white, size: 20),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  'منتهي',
-                  style: AppTextStyles.name,
-                )
+                type == 'end'
+                    ? Text(
+                        'منتهي',
+                        style: AppTextStyles.w400b,
+                      )
+                    : type == 'accept'
+                        ? Text(
+                            'قادم',
+                            style: AppTextStyles.w400b,
+                          )
+                        : Text(
+                            'قيد المراجعة',
+                            style: AppTextStyles.w400b,
+                          )
               ],
             )
           ],
         ),
       ),
-    )
-    ;
+    );
   }
 }

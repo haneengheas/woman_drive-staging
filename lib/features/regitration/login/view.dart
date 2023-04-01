@@ -17,6 +17,7 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+bool? checked = false;
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               // البريد الالكتروني
               TextFieldTemplate(
-                hintText: 'البريد الالكتروني',
+                hintText: 'البريد الإلكتروني',
                 icon: Icons.mail_outlined,
               ),
               // كلمة المرور
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
                       onTap: () => navigateTo(context, const ResetPassword()),
@@ -68,6 +69,28 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: AppColors.black,
                           )),
                     ),
+                    Row(
+                      textDirection: TextDirection.rtl,
+                      children: [
+                        Checkbox(
+                            activeColor: AppColors.yellow,
+                            value: checked,
+                            onChanged: (value) {
+                              setState(() {
+                                checked = value;
+                              });
+                            }),
+                        Text(
+                          'تذكرني ',
+                          style: GoogleFonts.tajawal(
+                          fontSize: 16,
+                          color: AppColors.black,
+                        )),
+
+                      ],
+                    ),
+
+
                   ],
                 ),
               ),

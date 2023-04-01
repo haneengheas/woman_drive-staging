@@ -38,7 +38,7 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                   onTap: () {},
                   image: female,
                   name: 'ريماس محمد',
-                  role: 'سائق',
+                  role: 'متدربة',
                 ),
                 const SizedBox(
                   height: 10,
@@ -152,7 +152,7 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'الاجمالي ',
+                      'الإجمالي ',
                       style: AppTextStyles.smTitles,
                     ),
                     Text(

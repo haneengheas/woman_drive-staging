@@ -1,73 +1,112 @@
 import 'package:flutter/material.dart';
-import 'package:woman_drive/shared/components/components.dart';
-import 'package:woman_drive/shared/components/constants.dart';
+import 'package:woman_drive/shared/components/navigator.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
-
 import '../../../shared/styles/images.dart';
 import '../../../shared/styles/styles.dart';
+import '../home/view.dart';
+import 'comment_info.dart';
+import 'new_comment_screen.dart';
 
-class CommentScreen extends StatefulWidget {
-  const CommentScreen({Key? key}) : super(key: key);
+class DriverCommentScreen extends StatefulWidget {
+  const DriverCommentScreen({Key? key}) : super(key: key);
 
   @override
-  State<CommentScreen> createState() => _CommentScreenState();
+  State<DriverCommentScreen> createState() => _DriverCommentScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+final formKey = GlobalKey<FormState>();
+TextEditingController titleController = TextEditingController();
+TextEditingController commentController = TextEditingController();
+
+class _DriverCommentScreenState extends State<DriverCommentScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('الشكاوي و المقترحات'),
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_ios_outlined,
-                color: AppColors.black,
-              )),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          ' شكاوى أو مقترحات ',
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-
-          child: Column(
-            children: [
-              // الصورة + الاسم
-              ProfileImage(
-                name: 'وجدان',
-                role: 'سائق',
-                image: female,
-                //onTap: (){},
-              ),
-              const Divider(
-                height: .5,
-                thickness: 1,
-              ),
-               Header(
-                text: 'ارسال شكوي او اقتراح',
-                 style: AppTextStyles.smTitles,
-              ),
-              TextFieldTemplate(
-                hintText: 'العنوان',
-              ),
-
-              TextFieldTemplate(
-                hintText: 'اكتب تعليقك او شكواك',
-                lines: 6,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ButtonTemplate(
-                  minwidth: width(context, 2),
-                  color: AppColors.yellow,
-                  text1: 'ارسال',
-                  onPressed: () => Navigator.pop(context)
-  )
-            ],
-          ),
-        ),
+        leading: IconButton(
+            onPressed: () => navigateTo(context, const DriverHomeScreen()),
+            icon: const Icon(
+              Icons.arrow_back_ios_outlined,
+            )),
       ),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+        itemCount: 4,
+        itemBuilder: (BuildContext context, int index) {
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.darkPink,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: AppColors.darkPink),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    navigateTo(context, DriverCommentInfo(reply: index,));
+                  },
+                  subtitle: const Text('2/2/2023'),
+                  leading: const CircleAvatar(
+                    backgroundImage: AssetImage(female),
+                    radius: 30,
+                  ),
+                  title: Text(
+                    'منى',
+                    style: AppTextStyles.name,
+                  ),
+                  trailing: Column(
+                    children: [
+                      CircleAvatar(
+                              backgroundColor: AppColors.darkPink,
+                              radius: 20,
+                              child: index.isOdd
+                                  ? const Image(
+                                      image: AssetImage(closedMessage),
+                                      height: 30,
+                                      width: 30,
+                                    )
+                                  : const Image(
+                                      image: AssetImage(openMessage),
+                                      height: 30,
+                                      width: 30,
+                                    ),
+                            ),
+                      //Image(image: AssetImage('assets/images/messages.png'),height: 20,),
+                    ],
+                  ),
+                )),
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: TextButton.icon(
+          style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+              ),
+              backgroundColor: MaterialStateProperty.all(AppColors.yellow),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: const BorderSide(color: AppColors.yellow)))),
+          onPressed: () {
+            navigateTo(context, const NewCommentScreen());
+          },
+          icon: const Icon(
+            Icons.add,
+            color: AppColors.white,
+          ),
+          label: Text(
+            'اضافة شكوى أو مقترح',
+            style: AppTextStyles.brButton,
+          )),
     );
   }
 }

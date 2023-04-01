@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:woman_drive/features/admin/bills_details/view.dart';
 import 'package:woman_drive/shared/components/components.dart';
 import 'package:woman_drive/shared/components/constants.dart';
@@ -22,7 +21,7 @@ class _BillsScreenState extends State<BillsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'الفواتير',
+          ' فواتير مدربين القيادة',
         ),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -64,22 +63,22 @@ class _BillsScreenState extends State<BillsScreen> {
                     ),
                     Column(
                       children: [
-                        RatingBar.builder(
-                          textDirection: TextDirection.rtl,
-                          initialRating: 4,
-                          itemSize: 25,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          ignoreGestures: true,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 2),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          onRatingUpdate: (rating) {},
-                        ),
+                        // RatingBar.builder(
+                        //   textDirection: TextDirection.rtl,
+                        //   initialRating: 4,
+                        //   itemSize: 25,
+                        //   direction: Axis.horizontal,
+                        //   allowHalfRating: true,
+                        //   itemCount: 5,
+                        //   ignoreGestures: true,
+                        //   itemPadding:
+                        //       const EdgeInsets.symmetric(horizontal: 2),
+                        //   itemBuilder: (context, _) => const Icon(
+                        //     Icons.star,
+                        //     color: Colors.amber,
+                        //   ),
+                        //   onRatingUpdate: (rating) {},
+                        // ),
                         Box(
                           color: AppColors.yellow,
                           style: AppTextStyles.name,

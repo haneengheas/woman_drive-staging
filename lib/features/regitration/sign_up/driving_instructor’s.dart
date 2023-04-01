@@ -1,15 +1,11 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:woman_drive/features/regitration/insructions/view.dart';
-import 'package:woman_drive/features/trainer/home/view.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 import 'package:woman_drive/shared/styles/styles.dart';
-
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/styles/colors.dart';
-
 class DrivingInstructorScreen extends StatefulWidget {
   const DrivingInstructorScreen({Key? key}) : super(key: key);
 
@@ -25,7 +21,7 @@ class _DrivingInstructorScreenState extends State<DrivingInstructorScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'انشاء حساب كمدرب قيادة',
+            'تسجيل كمدربة قيادة',
           ),
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
@@ -48,7 +44,7 @@ class _DrivingInstructorScreenState extends State<DrivingInstructorScreen> {
                     icon: Icons.person,
                   ),
                   TextFieldTemplate(
-                    hintText: 'البريد الالكتروني',
+                    hintText: 'البريد الإلكتروني',
                     icon: Icons.mail_outlined,
                   ),
                   TextFieldTemplate(
@@ -61,7 +57,7 @@ class _DrivingInstructorScreenState extends State<DrivingInstructorScreen> {
                   ),
                   TextFieldTemplate(
                     hintText: 'العمر',
-                    icon: Icons.mail_outlined,
+                    icon: Icons.calendar_month,
                   ),
                   TextFieldTemplate(
                     hintText: 'رقم الهاتف',
@@ -83,7 +79,7 @@ class _DrivingInstructorScreenState extends State<DrivingInstructorScreen> {
                   CustomButtonTemplate(
                     height: 50,
                     width: width(context, 1.2),
-                    text: 'اضافة صورة الرخصة',
+                    text: 'إضافة صورة الرخصة',
                     color: AppColors.yellow,
                     textStyle: AppTextStyles.brButton,
                     onPressed: () {},
@@ -96,7 +92,9 @@ class _DrivingInstructorScreenState extends State<DrivingInstructorScreen> {
                     child: ButtonTemplate(
                       color: AppColors.yellow,
                       onPressed: () =>
-                          navigateTo(context, const InstructionsScreen()),
+                          navigateTo(context, const InstructionsScreen(
+                            type: 'trainer',
+                          )),
                       minwidth: width(context, 2),
                       text1: 'تسجيل ',
                     ),

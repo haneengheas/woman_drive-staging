@@ -1,5 +1,8 @@
+// ignore_for_file: unused_element
+
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:woman_drive/features/driver/reservation_payment/view.dart';
 import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
@@ -16,8 +19,92 @@ class ReservationScreen extends StatefulWidget {
 }
 
 class _ReservationScreenState extends State<ReservationScreen> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime? _selectedDay;
+  List<String> days = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+  ];
+  List<String> hoursNum = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+  ];
+  List<String> hours = [
+    '9:00 Am',
+    '10:00 Am',
+    '11:00 Am',
+    '12:00 Pm',
+    '1:00 Pm',
+    '2:00 Pm',
+    '3:00 Pm',
+    '4:00 Pm',
+    '5:00 Pm',
+    '6:00 Pm',
+    '7:00 Pm',
+    '8:00 Pm',
+    '9:00 Pm',
+    '10:00 Pm',
+  ];
+
+  String? daysSelected;
+  String? hoursSelected;
+  String? numHoursSelected;
+
+  bool _predicate(DateTime day) {
+    if ((day.isAfter(DateTime(2023, 3, 1)) &&
+        day.isBefore(DateTime(2023, 4, 15)))) {
+      return true;
+    }
+
+    if ((day.isAfter(DateTime(2023, 2, 10)) &&
+        day.isBefore(DateTime(2023, 3, 15)))) {
+      return true;
+    }
+    // if ((day.isAfter(DateTime(2023, 4, 5)) &&
+    //     day.isBefore(DateTime(2023, 4, 17)))) {
+    //   return true;
+    // }
+
+    return false;
+  }
+
+  List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
+
+  String _getValueText(
+    CalendarDatePicker2Type datePickerType,
+    List<DateTime?> values,
+  ) {
+    values =
+        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
+    var valueText = (values.isNotEmpty ? values[0] : null)
+        .toString()
+        .replaceAll('00:00:00.000', '');
+
+    if (datePickerType == CalendarDatePicker2Type.multi) {
+      valueText = values.isNotEmpty
+          ? values
+              .map((v) => v.toString().replaceAll('00:00:00.000', ''))
+              .join(', ')
+          : 'null';
+    } else if (datePickerType == CalendarDatePicker2Type.range) {
+      if (values.isNotEmpty) {
+        final startDate = values[0].toString().replaceAll('00:00:00.000', '');
+        final endDate = values.length > 1
+            ? values[1].toString().replaceAll('00:00:00.000', '')
+            : 'null';
+        valueText = '$startDate to $endDate';
+      } else {
+        return 'null';
+      }
+    }
+    return valueText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +121,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
               )),
         ),
         body: SingleChildScrollView(
-          //padding: const EdgeInsets.symmetric(horizontal: 5),
-
           child: Column(
             children: [
               const SizedBox(
@@ -45,57 +130,59 @@ class _ReservationScreenState extends State<ReservationScreen> {
               Box(
                 height: 40,
                 style: AppTextStyles.name,
-                text: 'كم عدد الساعات تحتاجها علي مدار الاسبوع؟  ',
+                text: 'كم عدد الأيام على مدار الاسبوع؟  ',
                 color: AppColors.pink,
                 dirction: Alignment.center,
               ),
-              // عدد الساعات
-              SizedBox(
-                width: width(context, 1.1),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10),
-                  itemCount: hours.length,
-                  scrollDirection: Axis.vertical,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        for (int i = 0; i < hours.length; i++) {
-                          if (hours[i]['isSelected'] == true) {
-                            setState(() {
-                              hours[i]['isSelected'] = false;
-                            });
-                          }
-                          setState(() {
-                            hours[index]['isSelected'] = true;
-                          });
-                        }
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: const Text('عدد الأيام على مدار الأسبوع'),
+                      items: days
+                          .map((days) => DropdownMenuItem<String>(
+                                value: days,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    days,
+                                    style: AppTextStyles.name,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      value: daysSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          daysSelected = value as String;
+                        });
                       },
-                      child: Container(
-                        height: 10,
-                        width: width(context, 5),
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
+                      buttonStyleData: ButtonStyleData(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                            color: hours[index]['isSelected']
-                                ? AppColors.pink
-                                : Colors.white,
-                            border: Border.all(color: AppColors.black),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(hours[index]['clock'],
-                            style: AppTextStyles.smTitles),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: AppColors.black,
+                          ),
+                          color: AppColors.white,
+                        ),
                       ),
-                    );
-                  },
+                      dropdownStyleData: const DropdownStyleData(
+                          maxHeight: 200,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                          )),
+                    ),
+                  ),
                 ),
               ),
+              // عدد الساعات
               const SizedBox(
                 height: 10,
               ),
@@ -103,96 +190,155 @@ class _ReservationScreenState extends State<ReservationScreen> {
               Box(
                 height: 40,
                 style: AppTextStyles.name,
-                text: 'كم عدد الساعات تحتاجها علي مدار الاسبوع؟  ',
+                text: 'اختر الايام التى تحتاجها على مدار الاسبوع؟  ',
                 color: AppColors.pink,
                 dirction: Alignment.center,
               ),
               // التقويم
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-                child: TableCalendar(
-                  rowHeight: 30,
-                  calendarStyle: CalendarStyle(
-                      defaultTextStyle: AppTextStyles.smTitles,
-                      weekNumberTextStyle: AppTextStyles.smTitles,
-                      selectedDecoration: const BoxDecoration(
-                        color: AppColors.red,
-                        shape: BoxShape.circle,
-                      )),
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DateTime.now(),
-                  selectedDayPredicate: (day) {
-                    return isSameDay(_selectedDay, day);
-                  },
-                  onDaySelected: (selectedDay, focusedDay) {
-                    setState(() {
-                      _selectedDay = selectedDay;
-//
-                      // update `_focusedDay` here as well
-                    });
-                  },
-                  calendarFormat: _calendarFormat,
-                  onFormatChanged: (format) {
-                    setState(() {
-                      _calendarFormat = format;
-                    });
-                  },
-                  onPageChanged: (focusedDay) {},
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                child: CalendarDatePicker2(
+                  config: CalendarDatePicker2Config(
+                      calendarType: CalendarDatePicker2Type.multi,
+                      selectedDayHighlightColor: AppColors.yellow,
+                      selectableDayPredicate: _predicate),
+                  value: _multiDatePickerValueWithDefaultValue,
+                  onValueChanged: (dates) => setState(
+                      () => _multiDatePickerValueWithDefaultValue = dates),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              // ToDo :
+              // Wrap(
+              //   children: [
+              //     const Text('Selection(s):  '),
+              //     const SizedBox(width: 10),
+              //     Text(
+              //       _getValueText(
+              //         CalendarDatePicker2Type.multi,
+              //         _multiDatePickerValueWithDefaultValue,
+              //       ),
+              //       overflow: TextOverflow.ellipsis,
+              //       maxLines: 1,
+              //       softWrap: false,
+              //     ),
+              //   ],
+              // ),
 
               // الساعة
-              SizedBox(
-                // height: 130,
-                width: width(context, 1.2),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10),
-                  itemCount: clock.length,
-                  scrollDirection: Axis.vertical,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        for (int i = 0; i < clock.length; i++) {
-                          if (clock[i]['isSelected'] == true) {
-                            setState(() {
-                              clock[i]['isSelected'] = false;
-                            });
-                          }
-                          setState(() {
-                            clock[index]['isSelected'] = true;
-                          });
-                        }
+              Box(
+                height: 40,
+                style: AppTextStyles.sName,
+                text: 'كم عدد الساعات التى تحتاجها في كل يوم تدريب  ؟  ',
+                color: AppColors.pink,
+                dirction: Alignment.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: const Text('عدد الساعات '),
+                      items: hoursNum
+                          .map((hoursNum) => DropdownMenuItem<String>(
+                                value: hoursNum,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    hoursNum,
+                                    style: AppTextStyles.name,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      value: numHoursSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          numHoursSelected = value as String;
+                        });
                       },
-                      child: Container(
-                        //height: 20,
-                        //width: width(context, 3.5),
-                        alignment: Alignment.center,
-                        // margin: const EdgeInsets.symmetric(
-                        //     horizontal: 10, vertical: 10),
+                      buttonStyleData: ButtonStyleData(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                            color: clock[index]['isSelected']
-                                ? AppColors.pink
-                                : Colors.white,
-                            border: Border.all(color: AppColors.black),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text(clock[index]['clock'],
-                            style: AppTextStyles.smTitles),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: AppColors.black,
+                          ),
+                          color: AppColors.white,
+                        ),
                       ),
-                    );
-                  },
+                      dropdownStyleData: const DropdownStyleData(
+                          maxHeight: 200,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                          )),
+                    ),
+                  ),
                 ),
               ),
+              Box(
+                height: 40,
+                style: AppTextStyles.name,
+                text: 'اختر وقت التدريب ',
+                color: AppColors.pink,
+                dirction: Alignment.center,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      hint: const Text('اختر الساعة المتاحة'),
+                      items: hours
+                          .map((hours) => DropdownMenuItem<String>(
+                                value: hours,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    hours,
+                                    style: AppTextStyles.name,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      value: hoursSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          hoursSelected = value as String;
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: AppColors.black,
+                          ),
+                          color: AppColors.white,
+                        ),
+                      ),
+                      dropdownStyleData: const DropdownStyleData(
+                        maxHeight: 300,
+                        padding: EdgeInsets.symmetric(horizontal: 10 ,vertical: 10),
+                        scrollbarTheme: ScrollbarThemeData(
+                          radius: Radius.circular(40),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
               const SizedBox(
                 height: 10,
               ),
@@ -212,56 +358,3 @@ class _ReservationScreenState extends State<ReservationScreen> {
     );
   }
 }
-
-List<Map<String, dynamic>> hours = [
-  {
-    'clock': '2',
-    'isSelected': false,
-  },
-  {
-    'clock': '3',
-    'isSelected': false,
-  },
-  {
-    'clock': '4',
-    'isSelected': false,
-  },
-  {
-    'clock': '5',
-    'isSelected': false,
-  },
-  {
-    'clock': '6',
-    'isSelected': false,
-  },
-  {
-    'clock': '7',
-    'isSelected': false,
-  },
-];
-List<Map<String, dynamic>> clock = [
-  {
-    'clock': '9:00 Am',
-    'isSelected': false,
-  },
-  {
-    'clock': '12:00 Pm',
-    'isSelected': false,
-  },
-  {
-    'clock': '3:00 Pm',
-    'isSelected': false,
-  },
-  {
-    'clock': '6:00 Pm ',
-    'isSelected': false,
-  },
-  {
-    'clock': '8:00 Pm',
-    'isSelected': false,
-  },
-  {
-    'clock': '8:30 Pm',
-    'isSelected': false,
-  },
-];

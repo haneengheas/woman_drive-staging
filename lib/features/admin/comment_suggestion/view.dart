@@ -19,7 +19,7 @@ class _CommentListScreenState extends State<CommentListScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            ' الشكاوي و التعليقات',
+            'شكاوى أو مقترحات ',
           ),
           leading: IconButton(
               onPressed: () => Navigator.pop(context),

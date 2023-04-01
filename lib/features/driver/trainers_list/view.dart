@@ -82,49 +82,49 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
 List<Map<String, dynamic>> trainer = [
   {
     'image': woman1,
-    'name': 'مني',
+    'name': 'منى',
     'color': AppColors.pink,
     'textColor': AppColors.red
   },
   {
     'image': woman2,
-    'name': 'ايمان',
+    'name': 'إيمان',
     'color': AppColors.lightGreen,
     'textColor': AppColors.green
   },
   {
     'image': woman3,
-    'name': 'ابتسام',
+    'name': 'إبتسام',
     'color': AppColors.lightOrange,
     'textColor': AppColors.brown
   },
   {
     'image': woman1,
-    'name': 'مني',
+    'name': 'منى',
     'color': AppColors.pink,
     'textColor': AppColors.red
   },
   {
     'image': woman1,
-    'name': 'مني',
+    'name': 'منى',
     'color': AppColors.pink,
     'textColor': AppColors.red
   },
   {
     'image': woman2,
-    'name': 'ايمان',
+    'name': 'إيمان',
     'color': AppColors.lightGreen,
     'textColor': AppColors.green
   },
   {
     'image': woman3,
-    'name': 'ابتسام',
+    'name': 'إبتسام',
     'color': AppColors.lightOrange,
     'textColor': AppColors.brown
   },
   {
     'image': woman1,
-    'name': 'مني',
+    'name': 'منى',
     'color': AppColors.pink,
     'textColor': AppColors.red
   },

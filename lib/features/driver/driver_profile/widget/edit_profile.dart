@@ -4,11 +4,11 @@ import '../../../../shared/components/components.dart';
 import '../../../../shared/components/constants.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/styles.dart';
+
 Future editProfile(
-    BuildContext context,
-      )
-{
-  return  showDialog(
+  BuildContext context,
+) {
+  return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -55,12 +55,13 @@ Future editProfile(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-
                 CustomButtonTemplate(
                   width: width(context, 3),
-                  color: AppColors. yellow,
+                  color: AppColors.yellow,
                   height: 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   text: 'تأكيد',
                   textStyle: AppTextStyles.button,
                 ),
@@ -68,15 +69,15 @@ Future editProfile(
                   width: width(context, 3),
                   color: AppColors.pink,
                   height: 40,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   text: 'الغاء',
                   textStyle: AppTextStyles.button,
                 ),
               ],
             ),
-
           ],
         );
       });
-
 }

@@ -19,9 +19,8 @@ class _DriverProfileState extends State<DriverProfile> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        
         appBar: AppBar(
-          title:  const Text(
+          title: const Text(
             'الملف الشخصي ',
           ),
           leading: IconButton(
@@ -29,33 +28,31 @@ class _DriverProfileState extends State<DriverProfile> {
               icon: const Icon(
                 Icons.arrow_back_ios_outlined,
               )),
-          actions: [
-            IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.logout,
-                  size: 30,
-                )),
-          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           //  mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             // تعديل صورة البروفايل
-            Stack(alignment: Alignment.bottomLeft, children: const [
-              CircleAvatar(
+            Stack(alignment: Alignment.bottomLeft, children: [
+              const CircleAvatar(
                 backgroundImage: AssetImage(female),
                 radius: 60,
               ),
               CircleAvatar(
                   radius: 20,
                   backgroundColor: AppColors.pink,
-                  child: Icon(
-                    Icons.edit,
-                    color: AppColors.black,
-                    size: 20,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      color: AppColors.black,
+                    ),
+                    onPressed: () {
+                      editProfile(context);
+                    },
                   )),
             ]),
             // معلومات الحساب
@@ -76,7 +73,7 @@ class _DriverProfileState extends State<DriverProfile> {
                     style: AppTextStyles.smTitles,
                   ),
                   Header(
-                    text: ' البريد الالكتروني : '' Wijdan@gmail.com',
+                    text: ' البريد الالكتروني : ' ' Wijdan@gmail.com',
                     style: AppTextStyles.smTitles,
                   ),
                   Header(
@@ -91,28 +88,28 @@ class _DriverProfileState extends State<DriverProfile> {
               ),
             ),
             // زر تعديل الملف الشخصي
-            CustomButtonTemplate(
-              width: width(context, 2),
-              color: AppColors.yellow,
-              height: 50,
-              onPressed: () {
-                editProfile(context);
-              },
-              text: 'تعديل',
-              textStyle: AppTextStyles.button,
-            ),
+            // CustomButtonTemplate(
+            //   width: width(context, 2),
+            //   color: AppColors.yellow,
+            //   height: 50,
+            //   onPressed: () {
+            //     editProfile(context);
+            //   },
+            //   text: 'تعديل',
+            //   textStyle: AppTextStyles.button,
+            // ),
             const SizedBox(
               height: 10,
             ),
             // زر تسجيل الخروج
-            CustomButtonTemplate(
-              width: width(context, 2),
-              color: AppColors.pink,
-              height: 50,
-              onPressed: () {},
-              text: 'تسجيل خروج',
-              textStyle: AppTextStyles.button,
-            ),
+            // CustomButtonTemplate(
+            //   width: width(context, 2),
+            //   color: AppColors.pink,
+            //   height: 50,
+            //   onPressed: () {},
+            //   text: 'تسجيل خروج',
+            //   textStyle: AppTextStyles.button,
+            // ),
           ],
         ),
       ),

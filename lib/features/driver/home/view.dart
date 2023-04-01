@@ -8,6 +8,7 @@ import 'package:woman_drive/shared/styles/styles.dart';
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/components/navigator.dart';
+import '../../regitration/login/view.dart';
 import '../driver_profile/view.dart';
 import '../trainers_list/view.dart';
 
@@ -23,6 +24,21 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title:  const Text(
+            'مرحبا بك ',
+          ),
+          leading: const Text(''),
+          actions: [
+
+            IconButton(
+                onPressed: () => navigateTo(context, const LoginScreen()),
+                icon: const Icon(
+                  Icons.logout,
+                  size: 30,
+                )),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -37,20 +53,20 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       textDirection: TextDirection.rtl,
                       children: [
                         Text(
-                          ' مرحبا بك , ويجدان',
+                          'وجدان',
                           style: AppTextStyles.name,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'سائق',
+                          'متدربة',
                           style: AppTextStyles.name,
                         ),
                       ],
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 30,
                     ),
                     InkWell(
                       onTap: () => navigateTo(context, const DriverProfile()),
@@ -67,7 +83,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 height: 5,
               ),
               SizedBox(
-                height: height(context, 5),
+                height: height(context, 7),
               ),
               ButtonTemplate(
                 color: AppColors.pink,
@@ -85,9 +101,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               ),
               ButtonTemplate(
                 color: AppColors.pink,
-                onPressed: () => navigateTo(context, const CommentScreen()),
+                onPressed: () => navigateTo(context, const DriverCommentScreen()),
                 minwidth: width(context, 1.7),
-                text1: 'شكاوي او مقترحات  ',
+                text1: 'شكاوى أو مقترحات  ',
               ),
             ],
           ),
