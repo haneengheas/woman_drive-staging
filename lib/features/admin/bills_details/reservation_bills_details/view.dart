@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:woman_drive/models/trainer_reservation_model.dart';
+import 'package:woman_drive/shared/components/constants.dart';
 
+import '../../../../models/driver_reservation_model.dart';
 import '../../../../shared/components/components.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/images.dart';
 import '../../../../shared/styles/styles.dart';
 
 class ReservationBillDetails extends StatefulWidget {
-  const ReservationBillDetails({Key? key}) : super(key: key);
+  final TrainerReservationModel? model;
+
+  const ReservationBillDetails({required this.model, Key? key})
+      : super(key: key);
 
   @override
   State<ReservationBillDetails> createState() => _ReservationBillDetailsState();
@@ -37,7 +43,7 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                 ProfileImage(
                   onTap: () {},
                   image: female,
-                  name: 'ريماس محمد',
+                  name: widget.model!.driverName,
                   role: 'متدربة',
                 ),
                 const SizedBox(
@@ -62,9 +68,17 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                       width: 30,
                     ),
                     Header(
-                      text: '  المدة: ساعتان',
+                      text: 'المدة : ' '${widget.model!.numHours}' ' ساعة ',
                       style: AppTextStyles.w400.apply(
                         color: AppColors.greyDark,
+                      ),
+                    ),
+                    Text(
+                      '${widget.model!.hours}'
+                          ' : الساعة  ',
+                      style: AppTextStyles.w400.copyWith(
+                        color: AppColors.greyDark,
+
                       ),
                     ),
                   ],
@@ -84,12 +98,25 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      '  PM التاريخ : 10/4/2023 - 8:00 ',
-                      style: AppTextStyles.w400.apply(
-                        color: AppColors.greyDark,
+                    SizedBox(
+                      width: width(context, 1.3),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                            'التاريخ : '
+                          '${widget.model!.dayDate}',
+
+
+                          style: AppTextStyles.w400.copyWith(
+                            color: AppColors.greyDark,
+                            //fontSize: 14
+
+
+                          ), ),
                       ),
                     ),
+
+
                   ],
                 ),
                 const SizedBox(
@@ -120,7 +147,7 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      'SR 100  ',
+                      '${widget.model!.total}' ' SR ',
                       style: AppTextStyles.smTitles,
                     ),
                   ],
@@ -152,11 +179,11 @@ class _ReservationBillDetailsState extends State<ReservationBillDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'الإجمالي ',
+                      'الاجمالي ',
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      'SR 115  ',
+                      '${(widget.model!.total!)} SR',
                       style: AppTextStyles.smTitles,
                     ),
                   ],

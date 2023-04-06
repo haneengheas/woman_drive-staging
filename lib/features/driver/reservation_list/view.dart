@@ -122,8 +122,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
                                   textDirection: TextDirection.rtl,
                                   child: ListTile(
                                     onTap: () {
-                                      navigateTo(context,
-                                          const ReservationBillDetails());
+                                      // navigateTo(context,
+                                      //     const ReservationBillDetails());
                                     },
                                     tileColor: AppColors.darkPink,
                                     shape: RoundedRectangleBorder(

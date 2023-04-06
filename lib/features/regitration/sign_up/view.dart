@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:woman_drive/features/regitration/sign_up/driving_instructor%E2%80%99s.dart';
+import 'package:woman_drive/features/regitration/sign_up/trainer/trainer.dart';
 import 'package:woman_drive/shared/components/components.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
 
 import '../../../shared/components/constants.dart';
 import '../../../shared/styles/images.dart';
-import 'driver.dart';
+import 'driver/driver.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: AppColors.yellow,
                     text1: 'تسجيل كمدربة قيادة',
                     onPressed: () =>
-                        navigateTo(context, const DrivingInstructorScreen())),
+                        navigateTo(context, const TrainerRegisterScreen())),
                 const SizedBox(
                   height: 10,
                 ),
@@ -54,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     minwidth: width(context, 1.7),
                     color: AppColors.yellow,
                     text1: 'تسجيل كمتدربة',
-                    onPressed: () => navigateTo(context, const DriverScreen())),
+                    onPressed: () => navigateTo(context, const DriverRegisterScreen())),
               ],
             ),
           ),

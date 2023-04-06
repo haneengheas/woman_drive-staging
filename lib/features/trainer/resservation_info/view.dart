@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/shared/components/constants.dart';
+import '../../../models/trainer_reservation_model.dart';
 import '../../../shared/components/components.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/images.dart';
 import '../../../shared/styles/styles.dart';
+import '../cubit/trainer_cubit.dart';
 
 class ReservationInFoScreen extends StatefulWidget {
- final  String? type;
+  final TrainerReservationModel model;
 
- const  ReservationInFoScreen({required this.type, Key? key}) : super(key: key);
+  const ReservationInFoScreen({required this.model, Key? key})
+      : super(key: key);
 
   @override
   State<ReservationInFoScreen> createState() => _ReservationInFoScreenState();
@@ -17,196 +21,237 @@ class ReservationInFoScreen extends StatefulWidget {
 class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'تفاصيل الحجز',
+    return BlocConsumer<TrainerCubit, TrainerState>(listener: (context, state) {
+      if (state is TrainerAcceptReservationSuccessState) {
+        print('success');
+        showToast(text: 'تمت الموافقة علي الطلب', state: ToastStates.success);
+        TrainerCubit.get(context).getTrainerData();
+        Navigator.pop(context);
+      }
+      if (state is TrainerRefusedReservationSuccessState) {
+        print('success');
+        showToast(text: 'تمت رفض الطلب', state: ToastStates.error);
+        Navigator.pop(context);
+      }
+    }, builder: (context, state) {
+      var trainermodel = TrainerCubit.get(context).model;
+      return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'تفاصيل الحجز',
+            ),
+            leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.arrow_back_ios_outlined,
+                )),
           ),
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_ios_outlined,
-              )),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // صورة البروفايل + الاسم
-              ProfileImage(
-                onTap: () {},
-                image: female,
-                name: 'ريماس محمد',
-                role: 'متدربة',
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // صورة البروفايل + الاسم
+                ProfileImage(
+                  onTap: () {},
+                  image: female,
+                  name: '${widget.model.driverName}',
+                  role: 'متدربة',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
 
-              Text(
-                'تفاصيل الحجز ',
-                style: AppTextStyles.smTitles,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
+                Text(
+                  'تفاصيل الحجز ',
+                  style: AppTextStyles.smTitles,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
 
-              // المدة
-              Row(
-                textDirection: TextDirection.rtl,
-                children: [
-                  const Image(
-                    image: AssetImage(clock),
-                    height: 25,
-                    width: 30,
-                  ),
-                  Header(
-                    text: '  المدة: ساعتان',
-                    style: AppTextStyles.w400.apply(
-                      color: AppColors.greyDark,
+                // المدة
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Image(
+                      image: AssetImage(clock),
+                      height: 20,
+                      width: 25,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // الوقت و التاريخ
-              Row(
-                textDirection: TextDirection.rtl,
-                children: [
-                  const Image(
-                    image: AssetImage(timeTable),
-                    height: 20,
-                    width: 30,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    '  PM التاريخ : 10/4/2023 - 8:00 ',
-                    style: AppTextStyles.w400.apply(
-                      color: AppColors.greyDark,
+                    Header(
+                      text: 'المدة : ' '${widget.model.numHours}' ' ساعة ',
+                      style: AppTextStyles.w400.apply(
+                        color: AppColors.greyDark,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                color: AppColors.black,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              // تفاصيل الفاتورة
-              Text(
-                'تفاصيل الفاتورة ',
-                style: AppTextStyles.smTitles,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              // التكلفة
-              Row(
-                textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'التكلفة ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                  Text(
-                    'SR 100  ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // القيمة المضافة
-              Row(
-                textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'القيمة المضافة ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                  Text(
-                    'SR 15  ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // الاجمالي
-              Row(
-                textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'الاجمالى ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                  Text(
-                    'SR 115  ',
-                    style: AppTextStyles.smTitles,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                color: AppColors.black,
-                height: 5,
-              ),
-
-              const SizedBox(
-                height: 40,
-              ),
-
-              widget.type == 'new'
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButtonTemplate(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          textStyle: AppTextStyles.button,
-                          color: AppColors.darkGreen,
-                          text: 'قبول',
-                          width: width(context, 3),
-                          height: 40,
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        CustomButtonTemplate(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          textStyle: AppTextStyles.button,
-                          color: AppColors.darkRed,
-                          text: 'رفض',
-                          width: width(context, 3),
-                          height: 40,
-                        ),
-                      ],
+                    Text(
+                      '${widget.model!.hours}'
+                      ' : الساعة  ',
+                      style: AppTextStyles.w400.copyWith(
+                        color: AppColors.greyDark,
+                      ),
                     )
-                  : const SizedBox(),
-            ],
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // الوقت و التاريخ
+                Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    const Image(
+                      image: AssetImage(timeTable),
+                      height: 20,
+                      width: 30,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: width(context, 1.3),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          'التاريخ : '
+                          '${widget.model!.dayDate}',
+                          style: AppTextStyles.w400.copyWith(
+                            color: AppColors.greyDark,
+                            //fontSize: 14
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  color: AppColors.black,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                // تفاصيل الفاتورة
+                Text(
+                  'تفاصيل الفاتورة ',
+                  style: AppTextStyles.smTitles,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                // التكلفة
+                Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'التكلفة ',
+                      style: AppTextStyles.smTitles,
+                    ),
+                    Text(
+                      '${widget.model.total}' ' SR ',
+                      style: AppTextStyles.smTitles,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // القيمة المضافة
+                Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'القيمة المضافة ',
+                      style: AppTextStyles.smTitles,
+                    ),
+                    Text(
+                      'SR 15  ',
+                      style: AppTextStyles.smTitles,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                // الاجمالي
+                Row(
+                  textDirection: TextDirection.rtl,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'الاجمالي ',
+                      style: AppTextStyles.smTitles,
+                    ),
+                    Text(
+                      '${(widget.model.total! + 15)} SR',
+                      style: AppTextStyles.smTitles,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  color: AppColors.black,
+                  height: 5,
+                ),
+
+                const SizedBox(
+                  height: 40,
+                ),
+
+                widget.model.accepted == 'قيد المراجعة'
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomButtonTemplate(
+                            onPressed: () {
+                              print(trainermodel!.name);
+                              print(trainermodel.bills!);
+                              print(widget.model.total! + 15);
+                              print(trainermodel.bills! +
+                                  widget.model.total! +
+                                  15);
+                              TrainerCubit.get(context).acceptReservation(
+                                uidDoc: widget.model.uidDoc!,
+                                bills: (trainermodel.bills)! +
+                                    (widget.model.total! + 15),
+                              );
+                            },
+                            textStyle: AppTextStyles.button,
+                            color: AppColors.darkGreen,
+                            text: 'قبول',
+                            width: width(context, 3),
+                            height: 40,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          CustomButtonTemplate(
+                            onPressed: () {
+                              TrainerCubit.get(context).refusedReservation(
+                                  uidDoc: widget.model.uidDoc!);
+                            },
+                            textStyle: AppTextStyles.button,
+                            color: AppColors.darkRed,
+                            text: 'رفض',
+                            width: width(context, 3),
+                            height: 40,
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

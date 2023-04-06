@@ -3,16 +3,24 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:woman_drive/features/driver/cubit/driver_cubit.dart';
+import 'package:woman_drive/features/driver/home/view.dart';
 import 'package:woman_drive/features/driver/reservation_payment/view.dart';
+import 'package:woman_drive/models/driver_model.dart';
 import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 
+import '../../../models/trainer_model.dart';
 import '../../../shared/components/components.dart';
+import '../../../shared/network/local/constant.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/styles.dart';
 
 class ReservationScreen extends StatefulWidget {
-  const ReservationScreen({Key? key}) : super(key: key);
+  final TrainerModel model;
+
+  const ReservationScreen({required this.model, Key? key}) : super(key: key);
 
   @override
   State<ReservationScreen> createState() => _ReservationScreenState();
@@ -108,253 +116,211 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'حجز موعد ',
-          ),
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_ios_outlined,
-              )),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
+    DriverModel? driverModel = DriverCubit.get(context).model;
+    return BlocConsumer<DriverCubit ,DriverState>(
+      listener: (context, state) {
+        if(state is DriverMakeReservationSuccessState){
+          showToast(text: 'تم ارسال طلبك بنجاح', state: ToastStates.success);
+          navigateTo(context, const DriverHomeScreen());
+        }
+      },
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'حجز موعد ',
               ),
-              // كم عدد الساعات
-              // Box(
-              //   height: 40,
-              //   style: AppTextStyles.name,
-              //   text: 'كم عدد الأيام على مدار الاسبوع؟  ',
-              //   color: AppColors.pink,
-              //   dirction: Alignment.center,
-              // ),
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-              //   child: Directionality(
-              //     textDirection: TextDirection.rtl,
-              //     child: DropdownButtonHideUnderline(
-              //       child: DropdownButton2(
-              //         isExpanded: true,
-              //         hint: const Text('عدد الأيام على مدار الأسبوع'),
-              //         items: days
-              //             .map((days) => DropdownMenuItem<String>(
-              //                   value: days,
-              //                   child: Container(
-              //                     alignment: Alignment.centerRight,
-              //                     child: Text(
-              //                       days,
-              //                       style: AppTextStyles.name,
-              //                     ),
-              //                   ),
-              //                 ))
-              //             .toList(),
-              //         value: daysSelected,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             daysSelected = value as String;
-              //           });
-              //         },
-              //         buttonStyleData: ButtonStyleData(
-              //           padding: const EdgeInsets.symmetric(
-              //               horizontal: 10, vertical: 5),
-              //           decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(14),
-              //             border: Border.all(
-              //               color: AppColors.black,
-              //             ),
-              //             color: AppColors.white,
-              //           ),
-              //         ),
-              //         dropdownStyleData: const DropdownStyleData(
-              //             maxHeight: 200,
-              //             padding: EdgeInsets.symmetric(horizontal: 10),
-              //             scrollbarTheme: ScrollbarThemeData(
-              //               radius: Radius.circular(40),
-              //             )),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // عدد الساعات
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // ما اليوم و الساعة
-              Box(
-                height: 40,
-                style: AppTextStyles.name,
-                text: 'اختر الايام التى تحتاجها على مدار الاسبوع؟  ',
-                color: AppColors.pink,
-                dirction: Alignment.center,
-              ),
-              // التقويم
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
-                child: CalendarDatePicker2(
-                  config: CalendarDatePicker2Config(
-                      calendarType: CalendarDatePicker2Type.multi,
-                      selectedDayHighlightColor: AppColors.yellow,
-                      selectableDayPredicate: _predicate),
-                  value: _multiDatePickerValueWithDefaultValue,
-                  onValueChanged: (dates) => setState(
-                      () => _multiDatePickerValueWithDefaultValue = dates),
-                ),
-              ),
-              // ToDo :
-              // Wrap(
-              //   children: [
-              //     const Text('Selection(s):  '),
-              //     const SizedBox(width: 10),
-              //     Text(
-              //       _getValueText(
-              //         CalendarDatePicker2Type.multi,
-              //         _multiDatePickerValueWithDefaultValue,
-              //       ),
-              //       overflow: TextOverflow.ellipsis,
-              //       maxLines: 1,
-              //       softWrap: false,
-              //     ),
-              //   ],
-              // ),
-
-              // الساعة
-              Box(
-                height: 40,
-                style: AppTextStyles.sName,
-                text: 'كم عدد الساعات التى تحتاجها في كل يوم تدريب  ؟  ',
-                color: AppColors.pink,
-                dirction: Alignment.center,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: const Text('عدد الساعات '),
-                      items: hoursNum
-                          .map((hoursNum) => DropdownMenuItem<String>(
-                                value: hoursNum,
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    hoursNum,
-                                    style: AppTextStyles.name,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      value: numHoursSelected,
-                      onChanged: (value) {
-                        setState(() {
-                          numHoursSelected = value as String;
-                        });
-                      },
-                      buttonStyleData: ButtonStyleData(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: AppColors.black,
-                          ),
-                          color: AppColors.white,
-                        ),
-                      ),
-                      dropdownStyleData: const DropdownStyleData(
-                          maxHeight: 200,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          scrollbarTheme: ScrollbarThemeData(
-                            radius: Radius.circular(40),
-                          )),
+              leading: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                  )),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Box(
+                    height: 40,
+                    style: AppTextStyles.name,
+                    text: 'اختر الايام التى تحتاجها على مدار الاسبوع؟  ',
+                    color: AppColors.pink,
+                    dirction: Alignment.center,
+                  ),
+                  // التقويم
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 5),
+                    child: CalendarDatePicker2(
+                      config: CalendarDatePicker2Config(
+                          calendarType: CalendarDatePicker2Type.multi,
+                          selectedDayHighlightColor: AppColors.yellow,
+                          selectableDayPredicate: _predicate),
+                      value: _multiDatePickerValueWithDefaultValue,
+                      onValueChanged: (dates) => setState(() {
+                        _multiDatePickerValueWithDefaultValue = dates;
+                        print(_multiDatePickerValueWithDefaultValue);
+                        daysSelected = _getValueText(
+                            CalendarDatePicker2Type.multi,
+                            _multiDatePickerValueWithDefaultValue);
+                        print(daysSelected);
+                      }),
                     ),
                   ),
-                ),
-              ),
-              Box(
-                height: 40,
-                style: AppTextStyles.name,
-                text: 'اختر وقت التدريب ',
-                color: AppColors.pink,
-                dirction: Alignment.center,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      isExpanded: true,
-                      hint: const Text('اختر الساعة المتاحة'),
-                      items: hours
-                          .map((hours) => DropdownMenuItem<String>(
-                                value: hours,
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    hours,
-                                    style: AppTextStyles.name,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      value: hoursSelected,
-                      onChanged: (value) {
-                        setState(() {
-                          hoursSelected = value as String;
-                        });
-                      },
-                      buttonStyleData: ButtonStyleData(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: AppColors.black,
+                  Box(
+                    height: 40,
+                    style: AppTextStyles.sName,
+                    text: 'كم عدد الساعات التى تحتاجها في كل يوم تدريب  ؟  ',
+                    color: AppColors.pink,
+                    dirction: Alignment.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 10),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: const Text('عدد الساعات '),
+                          items: hoursNum
+                              .map((hoursNum) => DropdownMenuItem<String>(
+                                    value: hoursNum,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        hoursNum,
+                                        style: AppTextStyles.name,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: numHoursSelected,
+                          onChanged: (value) {
+                            setState(() {
+                              numHoursSelected = value as String;
+                            });
+                          },
+                          buttonStyleData: ButtonStyleData(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: AppColors.black,
+                              ),
+                              color: AppColors.white,
+                            ),
                           ),
-                          color: AppColors.white,
-                        ),
-                      ),
-                      dropdownStyleData: const DropdownStyleData(
-                        maxHeight: 300,
-                        padding: EdgeInsets.symmetric(horizontal: 10 ,vertical: 10),
-                        scrollbarTheme: ScrollbarThemeData(
-                          radius: Radius.circular(40),
+                          dropdownStyleData: const DropdownStyleData(
+                              maxHeight: 200,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              scrollbarTheme: ScrollbarThemeData(
+                                radius: Radius.circular(40),
+                              )),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
+                  Box(
+                    height: 40,
+                    style: AppTextStyles.name,
+                    text: 'اختر وقت التدريب ',
+                    color: AppColors.pink,
+                    dirction: Alignment.center,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 10),
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: const Text('اختر الساعة المتاحة'),
+                          items: hours
+                              .map((hours) => DropdownMenuItem<String>(
+                                    value: hours,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        hours,
+                                        style: AppTextStyles.name,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: hoursSelected,
+                          onChanged: (value) {
+                            setState(() {
+                              hoursSelected = value as String;
+                            });
+                          },
+                          buttonStyleData: ButtonStyleData(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: AppColors.black,
+                              ),
+                              color: AppColors.white,
+                            ),
+                          ),
+                          dropdownStyleData: const DropdownStyleData(
+                            maxHeight: 300,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            scrollbarTheme: ScrollbarThemeData(
+                              radius: Radius.circular(40),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
 
-              const SizedBox(
-                height: 10,
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomButtonTemplate(
+                    color: AppColors.yellow,
+                    height: 35,
+                    width: width(context, 3),
+                    onPressed: () {
+                      int total =
+                          ((int.parse(numHoursSelected!) * widget.model.price!) + 15);
+                      print(numHoursSelected.runtimeType);
+                      String today = todayDate();
+                      print(total);
+                      print(driverModel!.name!);
+                      print(widget.model.name);
+                      print(hoursSelected);
+                      print(daysSelected);
+                      DriverCubit.get(context).reservationRequest(
+                          hours: hoursSelected!,
+                          dayDate: daysSelected!,
+                          numHours: numHoursSelected!,
+                          total: total,
+                          uidTrainer: widget.model.uid!,
+                          uidDriver: driverModel.uid!,
+                          driverName: driverModel.name!,
+                          dateOfDay: today,
+                          trainerName: widget.model.name!);
+                    },
+                    text: 'التالي',
+                    textStyle: AppTextStyles.brButton,
+                  ),
+                ],
               ),
-              CustomButtonTemplate(
-                color: AppColors.yellow,
-                height: 35,
-                width: width(context, 3),
-                onPressed: () =>
-                    navigateTo(context, const ReservationPaymentScreen()),
-                text: 'التالي',
-                textStyle: AppTextStyles.brButton,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

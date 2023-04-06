@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:woman_drive/features/regitration/insructions/widget/instruction_info_card.dart';
@@ -9,12 +10,14 @@ import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/styles/colors.dart';
 import '../../../shared/styles/styles.dart';
+import '../../driver/cubit/driver_cubit.dart';
 import '../../driver/home/view.dart';
+import '../login/view.dart';
 
 class InstructionsScreen extends StatefulWidget {
- final  String? type;
+  final String? type;
 
- const  InstructionsScreen({required this.type, Key? key}) : super(key: key);
+  const InstructionsScreen({required this.type, Key? key}) : super(key: key);
 
   @override
   State<InstructionsScreen> createState() => _InstructionsScreenState();
@@ -65,12 +68,26 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                   color: AppColors.yellow,
                   text1: 'تسجيل',
                   onPressed: () {
-                    if (kDebugMode) {
-                      print(widget.type);
-                    }
-                    if (widget.type == 'trainer') {
-                      navigateTo(context, const TrainerHomeScreen());
+                    if (checked == false) {
+                      showToast(
+                          text: 'يجب الموافقة علي الشروط و الاحكام ',
+                          state: ToastStates.error);
+                    } else if (widget.type == 'trainer') {
+                      AwesomeDialog(
+                          width: width(context, 1),
+                          context: context,
+                          dialogType: DialogType.success,
+                          title: "",
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          body: Text(
+                            "تم ارسال طلبك بنجاح, طلبك قيد المراجعة",
+                            style: AppTextStyles.sName,
+                          )).show().then((value) {
+                        navigateAndReplace(context, const LoginScreen());
+                      });
                     } else {
+                      DriverCubit.get(context).getDriverData();
                       navigateTo(context, const DriverHomeScreen());
                     }
                   })

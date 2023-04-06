@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:woman_drive/features/regitration/login/view.dart';
 import 'package:woman_drive/shared/styles/images.dart';
@@ -5,10 +6,13 @@ import 'package:woman_drive/shared/styles/images.dart';
 import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/components/navigator.dart';
+import '../../../shared/network/local/constant.dart';
 import '../../../shared/styles/colors.dart';
 import '../bills/view.dart';
 import '../comment_suggestion/view.dart';
+import '../cubit/admin_cubit.dart';
 import '../new_trainer/view.dart';
+
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({Key? key}) : super(key: key);
@@ -22,14 +26,20 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  const Text(
+        title: const Text(
           'مرحبا بك ',
         ),
         leading: const Text(''),
         actions: [
-
           IconButton(
-              onPressed: () => navigateTo(context, const LoginScreen()),
+              onPressed: () {
+                uId = '';
+                if (kDebugMode) {
+                  print(uId);
+                }
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                navigateAndReplace(context, const LoginScreen());
+              },
               icon: const Icon(
                 Icons.logout,
                 size: 30,
@@ -40,15 +50,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // const SizedBox(
-              //   height: 20,
-              // ),
               // الصورة الشخصية + الاسم
               ProfileImage(
                 name: 'المشرف',
                 role: '',
                 image: female,
-
               ),
               const Divider(
                 color: AppColors.black,
@@ -59,20 +65,28 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               ),
               ButtonTemplate(
                 color: AppColors.pink,
-                onPressed: () => navigateTo(context, const CommentListScreen()),
+
+                  onPressed: ()
+                  { AdminCubit.get(context).getComment();
+                    navigateTo(context, const CommentListScreen());},
                 minwidth: width(context, 1.7),
                 text1: 'شكاوى أو مقترحات  ',
               ),
               ButtonTemplate(
                 color: AppColors.yellow,
-                onPressed: () =>
-                    navigateTo(context, const BillsScreen()),
+                onPressed: () {
+                  AdminCubit.get(context).getBills();
+                  navigateTo(context, const BillsScreen());
+                },
                 minwidth: width(context, 1.7),
                 text1: ' فواتير مدربين القيادة',
               ),
               ButtonTemplate(
                 color: AppColors.pink,
-                onPressed: () => navigateTo(context, const NewTrainer()),
+                onPressed: () {
+                  AdminCubit.get(context).getTrainersData();
+                  navigateTo(context, const NewTrainer());
+                },
                 minwidth: width(context, 1.7),
                 text1: 'المدربين الجدد',
               ),

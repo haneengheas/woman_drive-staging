@@ -39,6 +39,13 @@ dependencies:
   multiselect:
   dropdown_button2:
   calendar_date_picker2:
+  fluttertoast:
+  flutter_conditional_rendering:
+  conditional_builder_null_safety:
+  awesome_dialog:
+  image_picker:
+  url_launcher:
+  intl:
 
 
 

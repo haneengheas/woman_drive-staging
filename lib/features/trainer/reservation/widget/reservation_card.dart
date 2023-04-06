@@ -4,22 +4,29 @@ import 'package:woman_drive/features/trainer/resservation_info/view.dart';
 import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 
+import '../../../../models/trainer_reservation_model.dart';
 import '../../../../shared/components/components.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/images.dart';
 import '../../../../shared/styles/styles.dart';
 
 class ReservationCard extends StatelessWidget {
-   final String? type;
+  final TrainerReservationModel model;
 
- const ReservationCard({required this.type, Key? key}) : super(key: key);
+  const ReservationCard({required this.model, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => navigateTo(context,  ReservationInFoScreen(type: type,)),
+      onTap: () {
+        navigateTo(
+            context,
+            ReservationInFoScreen(
+              model: model,
+            ));
+      },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -32,7 +39,7 @@ class ReservationCard extends StatelessWidget {
           children: [
             //  الصورة
             const CircleAvatar(
-              backgroundImage: AssetImage(woman2),
+              backgroundImage: AssetImage(female),
               backgroundColor: AppColors.pink,
               radius: 25,
             ),
@@ -44,17 +51,18 @@ class ReservationCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'ريماس محمد',
-                    style: AppTextStyles.sName,
+                    '${model.driverName}',
+                    style: AppTextStyles.name,
                   ),
                   Text(
-                    '20 October 2023',
-                    style: AppTextStyles.w400s,
+                    '${model.dateOfDay}',
+                    style: AppTextStyles.w400b,
                   ),
-                  type == 'end'
-                      ? RatingBar.builder(
+                  model.accepted != 'منتهي'
+                      ? const SizedBox()
+                      : RatingBar.builder(
                           textDirection: TextDirection.rtl,
-                          initialRating: 3,
+                          initialRating: model.rate!,
                           itemSize: 20,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -67,14 +75,7 @@ class ReservationCard extends StatelessWidget {
                             color: Colors.amber,
                           ),
                           onRatingUpdate: (rating) {},
-                        )
-                      : const SizedBox(),
-                  Box(
-                    text: 'RemasMohamed@gmail.com',
-                    color: AppColors.yellow,
-                    height: 30,
-                    style: AppTextStyles.w400s,
-                  )
+                        ),
                 ],
               ),
             ),
@@ -84,19 +85,23 @@ class ReservationCard extends StatelessWidget {
                 const CircleAvatar(
                   backgroundColor: AppColors.darkGreen,
                   radius: 10,
-                  child: Icon(Icons.check, color: AppColors.white, size: 20),
+                  child: Icon(
+                    Icons.check,
+                    color: AppColors.white,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                type == 'end'
+                model.accepted == 'منتهي'
                     ? Text(
                         'منتهي',
                         style: AppTextStyles.w400b,
                       )
-                    : type == 'accept'
+                    : model.accepted == 'مقبول'
                         ? Text(
-                            'قادم',
+                            'مقبول',
                             style: AppTextStyles.w400b,
                           )
                         : Text(

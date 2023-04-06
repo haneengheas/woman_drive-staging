@@ -1,17 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:woman_drive/shared/components/components.dart';
 import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
 
+import '../../../models/trainer_model.dart';
 import '../../../shared/styles/images.dart';
 import '../../../shared/styles/styles.dart';
+import '../cubit/driver_cubit.dart';
 import '../reservation/view.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
-  const TrainerProfileScreen({Key? key}) : super(key: key);
+  TrainerModel model;
+  String image;
+
+  TrainerProfileScreen({required this.model, required this.image, Key? key})
+      : super(key: key);
 
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
@@ -22,6 +29,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+   // var trainerModel = DriverCubit.get(context).trainerReservationList;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -42,9 +50,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               children: [
                 // صورة البروفايل + الاسم
                 ProfileImage(
-                  name: 'وجدان',
-                  role: 'مدربة قيادة',
-                  image: female,
+                  name: widget.model.name,
+                  role: 'مدرب قيادة',
+                  image: widget.image,
                   onTap: () {},
                 ),
                 const SizedBox(
@@ -52,7 +60,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 ),
                 // السعر+ نوع السيارة
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: Column(
                     children: [
                       Row(
@@ -67,11 +75,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             width: 10,
                           ),
                           Text(
-                            '100 RS',
-                            style: AppTextStyles.w400.copyWith(
+                            '${widget.model.price}' ' RS',
+                            style: AppTextStyles.w400.apply(
                               color: AppColors.greyDark,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold
                             ),
                           ),
                           const SizedBox(
@@ -86,7 +92,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             width: 10,
                           ),
                           Text(
-                            'نوع السيارة : كيا ',
+                            '${widget.model.carType}' ' : نوع السيارة ',
                             style: AppTextStyles.w400.apply(
                               color: AppColors.greyDark,
                             ),
@@ -106,10 +112,12 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             width: 30,
                           ),
                           const SizedBox(
-                            width: 5,
+                            width: 10,
                           ),
                           Text(
-                            'اقبل تدريب لمن تزيد اعمارهم عن 18 سنة',
+                            'اقبل تدريب لمن تزيد اعمارهم عن  '
+                                '${widget.model.ageDriver}'
+                                ' سنة ',
                             style: AppTextStyles.w400.apply(
                               color: AppColors.greyDark,
                             ),
@@ -132,7 +140,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             width: 10,
                           ),
                           Text(
-                            'Mona@gmail.com',
+                            '${widget.model.email}',
                             style: AppTextStyles.w400.apply(
                               color: AppColors.greyDark,
                             ),
@@ -150,7 +158,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       color: AppColors.yellow,
                       height: 35,
                       width: width(context, 3),
-                      onPressed: () {},
+                      onPressed: () {
+                        launchUrl(Uri.parse(widget.model.licenseImage!));
+                      },
                       text: 'عرض الرخصة',
                       textStyle: AppTextStyles.brButton,
                     ),
@@ -158,8 +168,11 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       color: AppColors.pink,
                       height: 35,
                       width: width(context, 3),
-                      onPressed: () =>
-                          navigateTo(context, const ReservationScreen()),
+                      onPressed: () => navigateTo(
+                          context,
+                          ReservationScreen(
+                            model: widget.model,
+                          )),
                       text: 'حجز',
                       textStyle: AppTextStyles.brButton,
                     ),
@@ -206,15 +219,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                         },
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 5, right: 20),
-                    //   child: Text(
-                    //     ' $showRating',
-                    //     style: AppTextStyles.name.apply(
-                    //       color: AppColors.greyDark,
-                    //     ),
-                    //   ),
-                    // )
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, right: 20),
+                      child: Text(
+                        ' $showRating',
+                        style: AppTextStyles.name.apply(
+                          color: AppColors.greyDark,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const Divider(
@@ -225,61 +238,63 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   color: AppColors.black,
                 ),
                 // التعليقات
-                Header(
-                  text: 'التعليقات',
-                  style: AppTextStyles.name,
-                ),
-                // التعليقات
-                SizedBox(
-                  height: height(context, 3),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: comment.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          // height: 100,
-                          width: width(context, 1.2),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border:
-                                Border.all(color: AppColors.red, width: 1.5),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            textDirection: TextDirection.rtl,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                textDirection: TextDirection.rtl,
-                                children: [
-                                  Text(
-                                    'اسم المستخدم  : ${comment[index]['name']} ',
-                                    style: AppTextStyles.w800,
-                                  ),
-                                  Text(
-                                    comment[index]['data'],
-                                    style: AppTextStyles.w600,
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                comment[index]['comment'],
-                                textDirection: TextDirection.rtl,
-                                style: AppTextStyles.w400,
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                )
+                // Header(
+                //   text: 'التعليقات',
+                //   style: AppTextStyles.name,
+                // ),
+                // // التعليقات
+                // trainerModel.isEmpty
+                //     ? const SizedBox()
+                //     : SizedBox(
+                //   height: height(context, 3),
+                //   child: ListView.builder(
+                //       shrinkWrap: true,
+                //       itemCount: trainerModel.length,
+                //       itemBuilder: (context, index) {
+                //         return Container(
+                //           margin: const EdgeInsets.symmetric(
+                //               horizontal: 20, vertical: 10),
+                //           padding: const EdgeInsets.symmetric(
+                //               horizontal: 10, vertical: 10),
+                //           // height: 100,
+                //           width: width(context, 1.2),
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(15),
+                //             border: Border.all(
+                //                 color: AppColors.red, width: 1.5),
+                //           ),
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             textDirection: TextDirection.rtl,
+                //             children: [
+                //               Row(
+                //                 mainAxisAlignment:
+                //                 MainAxisAlignment.spaceBetween,
+                //                 textDirection: TextDirection.rtl,
+                //                 children: [
+                //                   Text(
+                //                     'اسم المستخدم  : ${trainerModel[index].driverName} ',
+                //                     style: AppTextStyles.w800,
+                //                   ),
+                //                   Text(
+                //                     ' ${trainerModel[index].dayDate}',
+                //                     style: AppTextStyles.w600,
+                //                   )
+                //                 ],
+                //               ),
+                //               const SizedBox(
+                //                 height: 10,
+                //               ),
+                //               Text(
+                //                 '${trainerModel[index].comment}',
+                //                 textDirection: TextDirection.rtl,
+                //                 style: AppTextStyles.w400,
+                //               )
+                //             ],
+                //           ),
+                //         );
+                //       }),
+                // )
               ],
             ),
           ),
