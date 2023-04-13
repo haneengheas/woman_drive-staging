@@ -87,7 +87,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                       ),
                     ),
                     Text(
-                      '${widget.model!.hours}'
+                      '${widget.model.hours}'
                       ' : الساعة  ',
                       style: AppTextStyles.w400.copyWith(
                         color: AppColors.greyDark,
@@ -116,7 +116,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                         textDirection: TextDirection.rtl,
                         child: Text(
                           'التاريخ : '
-                          '${widget.model!.dayDate}',
+                          '${widget.model.dayDate}',
                           style: AppTextStyles.w400.copyWith(
                             color: AppColors.greyDark,
                             //fontSize: 14
@@ -153,7 +153,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      '${widget.model.total}' ' SR ',
+                      '${(widget.model.total! - 15)}' ' SR ',
                       style: AppTextStyles.smTitles,
                     ),
                   ],
@@ -189,7 +189,7 @@ class _ReservationInFoScreenState extends State<ReservationInFoScreen> {
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      '${(widget.model.total! + 15)} SR',
+                      '${(widget.model.total! )} SR',
                       style: AppTextStyles.smTitles,
                     ),
                   ],

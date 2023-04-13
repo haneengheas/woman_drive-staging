@@ -206,6 +206,8 @@ class TrainerRegisterCubit extends Cubit<TrainerRegisterState> {
       'uid': uid,
       'price': 0,
       'bills': 0,
+      'hours': [],
+      'days': [],
     }).then((value) {
       emit(TrainerRegisterSuccessState(uid));
     }).catchError((error) {

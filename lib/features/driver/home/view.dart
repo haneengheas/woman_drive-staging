@@ -167,7 +167,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               body: LinearProgressIndicator(),
             );
           });
-    });;
+    });
 
   }
 }

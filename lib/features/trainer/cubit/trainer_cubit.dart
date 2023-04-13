@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/models/trainer_model.dart';
@@ -41,11 +42,17 @@ class TrainerCubit extends Cubit<TrainerState> {
     required String ageDriver,
     required int price,
     required List hours,
+    required List days,
+    required String carType,
+    required String licenceNumber,
   }) {
     FirebaseFirestore.instance.collection('trainer').doc(uId).set({
       'ageDriver': ageDriver,
       'price': price,
       'hours': hours,
+      'days': days,
+      'carType': carType,
+      'licenseNumber': licenceNumber
     }, SetOptions(merge: true)).then((value) {
       emit(TrainerSetDataSuccessState());
     }).catchError((error) {});
@@ -58,9 +65,10 @@ class TrainerCubit extends Cubit<TrainerState> {
     required String phone,
     required String age,
     required String address,
-    required String licenseNumber,
-    required String carType,
+    // required String licenseNumber,
+    // required String carType,
   }) {
+    FirebaseAuth.instance.currentUser!.updateEmail(email);
     FirebaseFirestore.instance.collection('trainer').doc(uId).update({
       'name': name,
       'email': email,
@@ -68,8 +76,8 @@ class TrainerCubit extends Cubit<TrainerState> {
       'phone': phone,
       'age': age,
       'address': address,
-      'licenseNumber': licenseNumber,
-      'carType': carType,
+      // 'licenseNumber': licenseNumber,
+      // 'carType': carType,
     }).then((value) {
       getTrainerData();
       emit(TrainerUpdateProfileSuccessState());
@@ -122,7 +130,6 @@ class TrainerCubit extends Cubit<TrainerState> {
             uidDoc: element.id,
             rate: element['rate']));
       }
-
     }).catchError((error) {
       emit(TrainerGetReservationErrorState(error.toString()));
     });

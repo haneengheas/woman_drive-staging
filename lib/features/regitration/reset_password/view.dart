@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
-
 import '../../../shared/components/components.dart';
 import 'cubit/reset_password_cubit.dart';
 
