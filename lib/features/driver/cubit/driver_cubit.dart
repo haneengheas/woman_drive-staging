@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_function_literals_in_foreach_calls, body_might_complete_normally_catch_error
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/models/comment_model.dart';
@@ -21,6 +22,11 @@ class DriverCubit extends Cubit<DriverState> {
   List<DriverReservationModel> reservationList = [];
   List<TrainerReservationModel> trainerReservationList = [];
   List<CommentModel> commentList = [];
+  double? rate;
+
+  List<DriverReservationModel> endReservationList = [];
+  List<DriverReservationModel> newReservationList = [];
+  List<DriverReservationModel> acceptedReservationList = [];
 
   getDriverData() {
     emit(DriverGetDataLoadingState());
@@ -46,6 +52,7 @@ class DriverCubit extends Cubit<DriverState> {
     required String phone,
     required String address,
   }) {
+    FirebaseAuth.instance.currentUser!.updateEmail(email);
     FirebaseFirestore.instance.collection('driver').doc(uId).update({
       'name': name,
       'email': email,
@@ -65,7 +72,7 @@ class DriverCubit extends Cubit<DriverState> {
         .collection('trainer')
         .get()
         .then((value) => {
-             trainersData.clear(),
+              trainersData.clear(),
               value.docs.forEach((element) {
                 trainersData.add(TrainerModel.fromJson(element.data()));
               }),
@@ -97,8 +104,8 @@ class DriverCubit extends Cubit<DriverState> {
       'numHours': numHours,
       'trainerName': trainerName,
       'uidTrainer': uidTrainer,
-      'rate': 1.5,
-      'comment': 'comment',
+      'rate': 1.0,
+      'comment': '',
     }).then((value) {
       getReservation();
       emit(DriverMakeReservationSuccessState());
@@ -117,6 +124,7 @@ class DriverCubit extends Cubit<DriverState> {
         .doc(uidDoc)
         .set({'rate': rate, 'comment': comment}, SetOptions(merge: true)).then(
             (value) {
+              getReservation();
       emit(DriverGiveRatingSuccessState());
     }).catchError((error) {
       emit(DriverGetReservationErrorState(error.toString()));
@@ -127,11 +135,12 @@ class DriverCubit extends Cubit<DriverState> {
     FirebaseFirestore.instance
         .collection('reservation')
         .where('uidDriver', isEqualTo: uId)
+        .where('accepted', isEqualTo: 'قيد المراجعة')
         .get()
         .then((value) {
-      reservationList.clear();
+      newReservationList.clear();
       for (var element in value.docs) {
-        reservationList.add(DriverReservationModel(
+        newReservationList.add(DriverReservationModel(
           trainerName: element['trainerName'],
           hours: element['hours'],
           total: element['total'],
@@ -140,10 +149,62 @@ class DriverCubit extends Cubit<DriverState> {
           dateOfDay: element['dateOfDay'],
           dayDate: element['dayDate'],
           uidTrainer: element['uidTrainer'],
+          comment: element['comment'],
+          rate: element['rate'],
           uidDoc: element.id,
         ));
       }
-      emit(DriverGetReservationSuccessState());
+    }).catchError((error) {
+      emit(DriverGetReservationErrorState(error.toString()));
+    });
+    FirebaseFirestore.instance
+        .collection('reservation')
+        .where('uidDriver', isEqualTo: uId)
+        .where('accepted', isEqualTo: 'مقبول')
+        .get()
+        .then((value) {
+      acceptedReservationList.clear();
+      for (var element in value.docs) {
+        acceptedReservationList.add(DriverReservationModel(
+          trainerName: element['trainerName'],
+          hours: element['hours'],
+          total: element['total'],
+          numHours: element['numHours'],
+          accepted: element['accepted'],
+          dateOfDay: element['dateOfDay'],
+          dayDate: element['dayDate'],
+          uidTrainer: element['uidTrainer'],
+          comment: element['comment'],
+          rate: element['rate'],
+          uidDoc: element.id,
+        ));
+      }
+    }).catchError((error) {
+      emit(DriverGetReservationErrorState(error.toString()));
+    });
+    FirebaseFirestore.instance
+        .collection('reservation')
+        .where('uidDriver', isEqualTo: uId)
+        .where('accepted', isEqualTo: 'منتهي')
+        .get()
+        .then((value) {
+      endReservationList.clear();
+      for (var element in value.docs) {
+        endReservationList.add(DriverReservationModel(
+          trainerName: element['trainerName'],
+          hours: element['hours'],
+          total: element['total'],
+          numHours: element['numHours'],
+          accepted: element['accepted'],
+          dateOfDay: element['dateOfDay'],
+          dayDate: element['dayDate'],
+          uidTrainer: element['uidTrainer'],
+          comment: element['comment'],
+          rate: element['rate'],
+          uidDoc: element.id,
+        ));
+        emit(DriverGetReservationSuccessState());
+      }
     }).catchError((error) {
       emit(DriverGetReservationErrorState(error.toString()));
     });
@@ -223,9 +284,25 @@ class DriverCubit extends Cubit<DriverState> {
         trainerReservationList
             .add(TrainerReservationModel.fromJson(element.data()));
       });
-      emit(DriverGetTrainerReservationSuccessState());
+      getRate();
+      emit(DriverGetTrainerReservationSuccessState(
+          trainerReservationList: trainerReservationList, rate: rate));
     }).catchError((error) {
       emit(DriverGetTrainerReservationErrorState(error.toString()));
     });
+  }
+
+  getRate() {
+    rate =
+        trainerReservationList.map((m) => m.rate).reduce((a, b) => a! + b!)! /
+            trainerReservationList.length;
+
+    print('rate');
+    print(rate);
+    if (rate == null) {
+      return 0.0;
+    } else {
+      return rate;
+    }
   }
 }

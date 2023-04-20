@@ -56,6 +56,8 @@ class _TrainerHomeScreenState extends State<TrainerHomeScreen> {
                         onPressed: () {
                           uId = '';
                           CacheHelper.removeToken(key: 'uid');
+                          CacheHelper.removeToken(key: 'request');
+                          CacheHelper.removeToken(key: 'type');
                           if (kDebugMode) {
                             print('log out');
                             print(uId);

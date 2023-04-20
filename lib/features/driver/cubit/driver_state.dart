@@ -14,6 +14,7 @@ class DriverGetDataErrorState extends DriverState {
 
   DriverGetDataErrorState(this.error);
 }
+
 class DriverUpdateDataLoadingState extends DriverState {}
 
 class DriverUpdateDataSuccessState extends DriverState {}
@@ -43,6 +44,7 @@ class DriverMakeReservationErrorState extends DriverState {
 
   DriverMakeReservationErrorState(this.error);
 }
+
 class DriverGetReservationLoadingState extends DriverState {}
 
 class DriverGetReservationSuccessState extends DriverState {}
@@ -53,7 +55,6 @@ class DriverGetReservationErrorState extends DriverState {
   DriverGetReservationErrorState(this.error);
 }
 
-
 class DriverGiveRatingLoadingState extends DriverState {}
 
 class DriverGiveRatingSuccessState extends DriverState {}
@@ -63,7 +64,6 @@ class DriverGiveRatingErrorState extends DriverState {
 
   DriverGiveRatingErrorState(this.error);
 }
-
 
 class DriverMakeCommentLoadingState extends DriverState {}
 
@@ -94,9 +94,17 @@ class DriverUpdateSeenErrorState extends DriverState {
 
   DriverUpdateSeenErrorState(this.error);
 }
+
 class DriverGetTrainerReservationLoadingState extends DriverState {}
 
-class DriverGetTrainerReservationSuccessState extends DriverState {}
+class DriverGetTrainerReservationSuccessState extends DriverState {
+  List<TrainerReservationModel> trainerReservationList;
+
+  double? rate;
+
+  DriverGetTrainerReservationSuccessState(
+      {required this.trainerReservationList, required this.rate});
+}
 
 class DriverGetTrainerReservationErrorState extends DriverState {
   final String error;

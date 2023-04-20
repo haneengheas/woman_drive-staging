@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:woman_drive/shared/components/navigator.dart';
 import '../../../../shared/components/components.dart';
 import '../../../../shared/components/constants.dart';
 import '../../../../shared/styles/colors.dart';
 import '../../../../shared/styles/styles.dart';
+import '../../cubit/driver_cubit.dart';
+import '../view.dart';
 
 Future rating(
   BuildContext context,
+  String uidDoc,
 ) {
+  double? rate;
+  TextEditingController commentController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   return showDialog(
       context: context,
       builder: (context) {
@@ -26,39 +33,49 @@ Future rating(
           content: SizedBox(
             width: width(context, 1),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    textDirection: TextDirection.rtl,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: RatingBar.builder(
-                          textDirection: TextDirection.rtl,
-                          initialRating: 0,
-                          minRating: 1,
-                          itemSize: 40,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 2),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Row(
+                      textDirection: TextDirection.rtl,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: RatingBar.builder(
+                            textDirection: TextDirection.rtl,
+                            initialRating: 0,
+                            minRating: 1,
+                            itemSize: 40,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 2),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              rate = rating;
+                            },
                           ),
-                          onRatingUpdate: (rating) {},
                         ),
-                      ),
-                    ],
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'شاركينا برأيك في المدربة',
-                    icon: null,
-                    lines: 6,
-                  ),
-                ],
+                      ],
+                    ),
+                    TextFieldTemplate(
+                        hintText: 'شاركينا برأيك في المدربة',
+                        icon: null,
+                        lines: 6,
+                        controller: commentController,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'برجاء ادخال رأيك ';
+                          }
+                        }),
+                  ],
+                ),
               ),
             ),
           ),
@@ -71,7 +88,19 @@ Future rating(
                   color: AppColors.yellow,
                   height: 40,
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (rate == null) {
+                      showToast(
+                          text: 'يجب مشاركتك بتقييم', state: ToastStates.error);
+                    } else {
+                      if (formKey.currentState!.validate()) {
+                        DriverCubit.get(context).giveRating(
+                          uidDoc: uidDoc,
+                          comment: commentController.text,
+                          rate: rate!,
+                        );
+                        navigateTo(context, ReservationListScreen());
+                      }
+                    }
                   },
                   text: 'ارسال',
                   textStyle: AppTextStyles.button,

@@ -100,7 +100,7 @@ class _BillsScreenState extends State<BillsScreen> {
                               height: 40,
                               dirction: Alignment.center,
                               text: 'الإجمالي : '
-                                  '${AdminCubit.get(context).billsList[index].bills} SR',
+                                  '${(AdminCubit.get(context).billsList[index].bills! - 15 )} SR',
                             ),
                           ],
                         ),

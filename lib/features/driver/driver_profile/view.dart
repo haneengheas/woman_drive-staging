@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/features/driver/driver_profile/widget/edit_profile.dart';
@@ -7,11 +8,13 @@ import 'package:woman_drive/shared/components/constants.dart';
 import 'package:woman_drive/shared/styles/colors.dart';
 
 import '../../../shared/components/navigator.dart';
+import '../../../shared/network/local/constant.dart';
 import '../../../shared/network/local/shared_preferences.dart';
 import '../../../shared/styles/images.dart';
 import '../../../shared/styles/styles.dart';
 import '../../regitration/login/view.dart';
 import '../cubit/driver_cubit.dart';
+
 class DriverProfile extends StatefulWidget {
   const DriverProfile({Key? key}) : super(key: key);
 
@@ -23,7 +26,11 @@ class _DriverProfileState extends State<DriverProfile> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DriverCubit, DriverState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is DriverUpdateDataSuccessState){
+            showToast(text: 'تم تعديل الملف الشخصي بنجاح', state: ToastStates.success);
+          }
+        },
         builder: (context, state) {
           var model = DriverCubit.get(context).model;
           return SafeArea(
@@ -33,17 +40,23 @@ class _DriverProfileState extends State<DriverProfile> {
                   'الملف الشخصي ',
                 ),
                 leading: IconButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      CacheHelper.removeToken(key: 'uid');
-                      navigateAndReplace(context, const LoginScreen());
-                    },
+                    onPressed: () =>Navigator.pop(context),
                     icon: const Icon(
                       Icons.arrow_back_ios_outlined,
                     )),
                 actions: [
                   IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        uId = '';
+                        CacheHelper.removeToken(key: 'uid');
+                        CacheHelper.removeToken(key: 'request');
+                        CacheHelper.removeToken(key: 'type');
+                        if (kDebugMode) {
+                          print(uId);
+                        }
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        navigateAndReplace(context, const LoginScreen());
+                      },
                       icon: const Icon(
                         Icons.logout,
                         size: 30,
@@ -63,14 +76,14 @@ class _DriverProfileState extends State<DriverProfile> {
                         backgroundImage: AssetImage(female),
                         radius: 60,
                       ),
-                      CircleAvatar(
-                          radius: 20,
-                          backgroundColor: AppColors.pink,
-                          child: Icon(
-                            Icons.edit,
-                            color: AppColors.black,
-                            size: 20,
-                          )),
+                      // CircleAvatar(
+                      //     radius: 20,
+                      //     backgroundColor: AppColors.pink,
+                      //     child: Icon(
+                      //       Icons.edit,
+                      //       color: AppColors.black,
+                      //       size: 20,
+                      //     )),
                     ]),
                     // معلومات الحساب
                     Container(
@@ -125,7 +138,14 @@ class _DriverProfileState extends State<DriverProfile> {
                       color: AppColors.pink,
                       height: 50,
                       onPressed: () {
-                        FirebaseAuth.instance.signOut();
+                        uId = '';
+                        CacheHelper.removeToken(key: 'uid');
+                        CacheHelper.removeToken(key: 'request');
+                        CacheHelper.removeToken(key: 'type');
+                        if (kDebugMode) {
+                          print(uId);
+                        }
+                        Navigator.of(context).popUntil((route) => route.isFirst);
                         navigateAndReplace(context, const LoginScreen());
                       },
                       text: 'تسجيل خروج',

@@ -7,13 +7,17 @@ import 'package:woman_drive/shared/network/local/constant.dart';
 import 'package:woman_drive/shared/network/local/shared_preferences.dart';
 import 'package:woman_drive/shared/styles/theme.dart';
 import 'features/admin/cubit/admin_cubit.dart';
+import 'features/admin/home/view.dart';
 import 'features/driver/cubit/driver_cubit.dart';
+import 'features/driver/home/view.dart';
 import 'features/trainer/cubit/trainer_cubit.dart';
+import 'features/trainer/home/view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await CacheHelper.init();
+  Widget? widget;
   Bloc.observer = MyBlocObserver();
   uId = CacheHelper.getData(key: 'uid');
   var type = CacheHelper.getData(key: 'type');
@@ -21,11 +25,24 @@ Future<void> main() async {
   print(uId);
   print(type);
   print(request);
-  runApp(const MyApp());
+  if (uId != null && type == 'trainer' && request == 'accepted') {
+    widget = const TrainerHomeScreen();
+  } else if (uId != null && type == 'driver' && request == 'accepted') {
+    widget = const DriverHomeScreen();
+  } else if (uId != null && type == 'admin' && request == 'accepted') {
+    widget = const AdminHomeScreen();
+  } else {
+    widget = const SplashScreen();
+  }
+
+  runApp( MyApp(
+    startWidget: widget,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget? startWidget;
+  const MyApp({super.key , this.startWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +64,13 @@ class MyApp extends StatelessWidget {
               create: (BuildContext context) => DriverCubit()
                 ..getDriverData()
                 ..getTrainersData()
-                ..getComment()),
+                ..getComment()..getReservation()),
         ],
         child: MaterialApp(
           theme: lightTheme,
           debugShowCheckedModeBanner: false,
           home: Scaffold(
-            body: SplashScreen(),
+            body: startWidget!,
           ),
         ));
   }

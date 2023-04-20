@@ -7,6 +7,7 @@ import '../../../shared/components/components.dart';
 import '../../../shared/components/constants.dart';
 import '../../../shared/components/navigator.dart';
 import '../../../shared/network/local/constant.dart';
+import '../../../shared/network/local/shared_preferences.dart';
 import '../../../shared/styles/colors.dart';
 import '../bills/view.dart';
 import '../comment_suggestion/view.dart';
@@ -34,6 +35,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           IconButton(
               onPressed: () {
                 uId = '';
+                CacheHelper.removeToken(key: 'uid');
+                CacheHelper.removeToken(key: 'request');
+                CacheHelper.removeToken(key: 'type');
                 if (kDebugMode) {
                   print(uId);
                 }

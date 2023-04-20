@@ -2,6 +2,7 @@
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:woman_drive/features/driver/cubit/driver_cubit.dart';
@@ -27,6 +28,8 @@ class ReservationScreen extends StatefulWidget {
 }
 
 class _ReservationScreenState extends State<ReservationScreen> {
+  late List<DateTime?> datesList = [];
+
   List<String> days = [
     '1',
     '2',
@@ -64,24 +67,34 @@ class _ReservationScreenState extends State<ReservationScreen> {
   String? hoursSelected;
   String? numHoursSelected;
 
-  bool _predicate(DateTime day) {
-    if ((day.isAfter(DateTime(2023, 3, 1)) &&
-        day.isBefore(DateTime(2023, 4, 15)))) {
+  bool _predicate(DateTime day ) {
+    if ((day.isAfter(datesList.first!.subtract(const Duration(days: 1)))
+        &&
+        day.isBefore(datesList.last!.add(const Duration(days: 1)))
+
+    )) {
       return true;
     }
 
-    if ((day.isAfter(DateTime(2023, 2, 10)) &&
-        day.isBefore(DateTime(2023, 3, 15)))) {
-      return true;
-    }
-    // if ((day.isAfter(DateTime(2023, 4, 5)) &&
-    //     day.isBefore(DateTime(2023, 4, 17)))) {
+    // if ((day.isAfter(DateTime(2023, 2, 10)) &&
+    //     day.isBefore(DateTime(2023, 3, 15)))) {
     //   return true;
     // }
 
+
     return false;
   }
-
+  getDateFormat() {
+    datesList.clear();
+    for (var element in widget.model.days!) {
+      DateTime formattedData = element.toDate();
+      datesList.add(formattedData);
+      if (kDebugMode) {
+        print(datesList);
+      }
+    }
+    return datesList;
+  }
   List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
 
   String _getValueText(
@@ -113,7 +126,12 @@ class _ReservationScreenState extends State<ReservationScreen> {
     }
     return valueText;
   }
-
+ @override
+  void initState() {
+    // TODO: implement initState
+   getDateFormat();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     DriverModel? driverModel = DriverCubit.get(context).model;
@@ -242,7 +260,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                         child: DropdownButton2(
                           isExpanded: true,
                           hint: const Text('اختر الساعة المتاحة'),
-                          items: hours
+                          items: widget.model.hours!
                               .map((hours) => DropdownMenuItem<String>(
                                     value: hours,
                                     child: Container(

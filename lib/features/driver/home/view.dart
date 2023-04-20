@@ -67,6 +67,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         onPressed: () {
                           uId = '';
                           CacheHelper.removeToken(key: 'uid');
+                          CacheHelper.removeToken(key: 'request');
+                          CacheHelper.removeToken(key: 'type');
                           if (kDebugMode) {
                             print('log out');
                             print(uId);
@@ -141,6 +143,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       ButtonTemplate(
                         color: AppColors.yellow,
                         onPressed: () {
+                          print('++++++');
+                          // DriverCubit.get(context).getReservation();
                           navigateTo(context, const ReservationListScreen());
                         },
                         minwidth: width(context, 1.7),

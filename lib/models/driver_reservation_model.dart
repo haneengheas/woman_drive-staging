@@ -9,6 +9,8 @@ class DriverReservationModel {
   String? numHours;
   int? total;
   String ? uidDoc;
+  String ? comment;
+  double ? rate ;
 
 
   DriverReservationModel({
@@ -21,6 +23,8 @@ class DriverReservationModel {
     this.hours,
     this.numHours,
     this.uidDoc,
+    this.comment,
+    this.rate
 
   });
 
@@ -34,6 +38,8 @@ class DriverReservationModel {
     hours = json['hours'];
     numHours = json['numHours'];
     uidDoc = json['uidDoc'];
+    comment = json['comment'];
+    rate = json['rate'];
 
   }
 
@@ -48,6 +54,8 @@ class DriverReservationModel {
       'hours': hours,
       'numHours': numHours,
       'uidDoc': uidDoc,
+      'comment': comment,
+      'rate': rate,
 
     };
   }

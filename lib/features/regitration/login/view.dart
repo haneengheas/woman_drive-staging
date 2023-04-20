@@ -143,7 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             } else if (value.length < 5) {
                               return 'يجب ان تتكون كلمة المرور علي الاقل من ثمانيه خانات';
                             }
-                          }),
+                          }
+                          ),
                       // هل نسيت كلمة المرور
                       Padding(
                         padding: const EdgeInsets.symmetric(

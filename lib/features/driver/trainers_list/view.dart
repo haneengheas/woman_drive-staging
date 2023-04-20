@@ -61,11 +61,11 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () {
-                              // DriverCubit.get(context)
-                              //     .getTrainerReservationComment(
-                              //     uidTrainer: DriverCubit
-                              //         .get(context)
-                              //         .trainersData[index].uid!);
+                              DriverCubit.get(context)
+                                  .getTrainerReservationComment(
+                                  uidTrainer: DriverCubit
+                                      .get(context)
+                                      .trainersData[index].uid!);
                               print(DriverCubit
                                   .get(context)
                                   .trainersData[index].name);

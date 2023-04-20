@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:woman_drive/models/driver_reservation_model.dart';
 import 'package:woman_drive/shared/components/components.dart';
 import 'package:woman_drive/shared/components/navigator.dart';
 
@@ -9,7 +10,9 @@ import '../../../shared/styles/styles.dart';
 import '../reservation_list/view.dart';
 
 class ReservationPaymentScreen extends StatefulWidget {
-  const ReservationPaymentScreen({Key? key}) : super(key: key);
+  DriverReservationModel? model;
+
+  ReservationPaymentScreen({required this.model, Key? key}) : super(key: key);
 
   @override
   State<ReservationPaymentScreen> createState() =>
@@ -19,7 +22,7 @@ class ReservationPaymentScreen extends StatefulWidget {
 class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
   bool fill = false;
   bool checked = false;
-
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,7 +48,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                   onTap: () {},
                   image: female,
                   role: 'مدربة قيادة',
-                  name: '  وجدان',
+                  name: '${widget.model!.trainerName}',
                 ),
                 const SizedBox(
                   height: 20,
@@ -58,26 +61,32 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-
                 // المدة
                 Row(
                   textDirection: TextDirection.rtl,
                   children: [
                     const Image(
                       image: AssetImage(clock),
-                      height: 25,
-                      width: 30,
+                      height: 20,
+                      width: 25,
                     ),
                     Header(
-                      text: '  المدة: ساعتان',
+                      text: 'المدة : ' '${widget.model!.numHours}' ' ساعة ',
                       style: AppTextStyles.w400.apply(
                         color: AppColors.greyDark,
                       ),
                     ),
+                    Text(
+                      '${widget.model!.hours}'
+                      ' : الساعة  ',
+                      style: AppTextStyles.w400.copyWith(
+                        color: AppColors.greyDark,
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 // الوقت و التاريخ
                 Row(
@@ -91,10 +100,18 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      '  PM التاريخ : 10/4/2023 - 8:00 ',
-                      style: AppTextStyles.w400.apply(
-                        color: AppColors.greyDark,
+                    SizedBox(
+                      width: width(context, 1.3),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          'التاريخ : '
+                          '${widget.model!.dayDate}',
+                          style: AppTextStyles.w400.copyWith(
+                            color: AppColors.greyDark,
+                            //fontSize: 14
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -126,7 +143,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      'SR 100  ',
+                      '${(widget.model!.total! - 15)}' ' SR ',
                       style: AppTextStyles.smTitles,
                     ),
                   ],
@@ -162,7 +179,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       style: AppTextStyles.smTitles,
                     ),
                     Text(
-                      'SR 115  ',
+                      '${(widget.model!.total!)} SR',
                       style: AppTextStyles.smTitles,
                     ),
                   ],
@@ -179,6 +196,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                   height: 35,
                 ),
 
+                widget.model!.accepted == 'قيد المراجعة' ||  widget.model!.accepted == 'منتهي'?
                 Center(
                   child: fill == false
                       ? ButtonTemplate(
@@ -197,83 +215,110 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                                   return StatefulBuilder(builder:
                                       (BuildContext context,
                                           StateSetter mystate) {
-                                    return Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15, vertical: 20),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            Center(
-                                                child: Text(
-                                              'اتمام عملية الدفع ',
-                                              style: AppTextStyles.boldtitles,
-                                            )),
-                                            // رقم البطاقة الائتمانية
-                                            TextFieldTemplate(
-                                              hintText:
-                                                  'رقم البطاقة الائتمانية',
-                                              icon: Icons.credit_card_outlined,
-                                            ),
-                                            // الباسورد + تاريخ الانتهاء
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width: width(context, 2.2),
-                                                  height: 100,
-                                                  //margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                  child: TextFieldTemplate(
-                                                    hintText: 'تاريخ الانتهاء',
-                                                    icon: Icons.date_range,
+                                    return Form(
+                                      key: formKey,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 20),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                  child: Text(
+                                                'اتمام عملية الدفع ',
+                                                style: AppTextStyles.boldtitles,
+                                              )),
+                                              // رقم البطاقة الائتمانية
+                                              TextFieldTemplate(
+                                                hintText:
+                                                    'رقم البطاقة الائتمانية',
+                                                icon: Icons.credit_card_outlined,
+                                                  validator: (String? value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'برجاء ادخال رقم البطاقة الائتمانية ';
+                                                    }
+                                                  }
+                                              ),
+                                              // الباسورد + تاريخ الانتهاء
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: width(context, 2.2),
+                                                    height: 100,
+                                                    //margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                    child: TextFieldTemplate(
+                                                      hintText: 'تاريخ الانتهاء',
+                                                      icon: Icons.date_range,
+                                                        validator: (String? value) {
+                                                          if (value!.isEmpty) {
+                                                            return 'برجاء ادخال تاريخ الانتهاء';
+                                                          }
+                                                        }
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: width(context, 2.2),
-                                                  height: 100,
-                                                  //margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                  child: TextFieldTemplate(
-                                                    hintText: 'الرقم السري',
-                                                    icon: Icons.lock,
+                                                  SizedBox(
+                                                    width: width(context, 2.2),
+                                                    height: 100,
+                                                    //margin: const EdgeInsets.symmetric(horizontal: 10),
+                                                    child: TextFieldTemplate(
+                                                      hintText: 'الرقم السري',
+                                                      icon: Icons.lock,
+                                                        validator: (String? value) {
+                                                          if (value!.isEmpty) {
+                                                            return 'برجاء ادخال الرقم السري ';
+                                                          }
+                                                        }
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            TextFieldTemplate(
-                                              hintText: 'الاسم علي البطاقة',
-                                              icon: Icons.person,
-                                            ),
-                                            Row(
-                                              textDirection: TextDirection.rtl,
-                                              children: [
-                                                Checkbox(
-                                                    activeColor:
-                                                        AppColors.yellow,
-                                                    value: checked,
-                                                    onChanged: (value) {
-                                                      mystate(() {
-                                                        checked = value!;
-                                                      });
-                                                    }),
-                                                Text(
-                                                  'حفظ المعلومات',
-                                                  style: AppTextStyles.sName,
-                                                ),
-                                              ],
-                                            ),
+                                                ],
+                                              ),
+                                              TextFieldTemplate(
+                                                hintText: 'الاسم علي البطاقة',
+                                                icon: Icons.person,
+                                                  validator: (String? value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'برجاء ادخال الاسم علي البطاقة ';
+                                                    }
+                                                  }
+                                              ),
+                                              Row(
+                                                textDirection: TextDirection.rtl,
+                                                children: [
+                                                  Checkbox(
+                                                      activeColor:
+                                                          AppColors.yellow,
+                                                      value: checked,
+                                                      onChanged: (value) {
+                                                        mystate(() {
+                                                          checked = value!;
+                                                        });
+                                                      }),
+                                                  Text(
+                                                    'حفظ المعلومات',
+                                                    style: AppTextStyles.sName,
+                                                  ),
+                                                ],
+                                              ),
 
-                                            CustomButtonTemplate(
-                                              height: 40,
-                                              width: width(context, 3),
-                                              color: AppColors.yellow,
-                                              text: 'اتمام العملية',
-                                              onPressed: () => {
-                                                setState(() {
-                                                  fill = true;
-                                                }),
-                                                Navigator.pop(context)
-                                              },
-                                              textStyle: AppTextStyles.brButton,
-                                            )
-                                          ],
+                                              CustomButtonTemplate(
+                                                height: 40,
+                                                width: width(context, 3),
+                                                color: AppColors.yellow,
+                                                text: 'اتمام العملية',
+                                                onPressed: () => {
+                                                  if(formKey.currentState!.validate()){
+                                                    setState(() {
+                                                      fill = true;
+                                                    }),
+                                                    Navigator.pop(context)
+
+                                                  },
+
+                                                },
+                                                textStyle: AppTextStyles.brButton,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
@@ -285,7 +330,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                           text1: 'عرض الحجز',
                           onPressed: () => navigateTo(
                               context, const ReservationListScreen())),
-                )
+                ) : SizedBox()
               ],
             ),
           ),
