@@ -67,12 +67,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
   String? hoursSelected;
   String? numHoursSelected;
 
-  bool _predicate(DateTime day ) {
-    if ((day.isAfter(datesList.first!.subtract(const Duration(days: 1)))
-        &&
-        day.isBefore(datesList.last!.add(const Duration(days: 1)))
-
-    )) {
+  bool _predicate(DateTime day) {
+    if ((day.isAfter(datesList.first!.subtract(const Duration(days: 1))) &&
+        day.isBefore(datesList.last!.add(const Duration(days: 1))))) {
       return true;
     }
 
@@ -81,9 +78,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
     //   return true;
     // }
 
-
     return false;
   }
+
   getDateFormat() {
     datesList.clear();
     for (var element in widget.model.days!) {
@@ -95,6 +92,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
     }
     return datesList;
   }
+
   List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
 
   String _getValueText(
@@ -126,18 +124,20 @@ class _ReservationScreenState extends State<ReservationScreen> {
     }
     return valueText;
   }
- @override
+
+  @override
   void initState() {
     // TODO: implement initState
-   getDateFormat();
+    getDateFormat();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     DriverModel? driverModel = DriverCubit.get(context).model;
-    return BlocConsumer<DriverCubit ,DriverState>(
+    return BlocConsumer<DriverCubit, DriverState>(
       listener: (context, state) {
-        if(state is DriverMakeReservationSuccessState){
+        if (state is DriverMakeReservationSuccessState) {
           showToast(text: 'تم ارسال طلبك بنجاح', state: ToastStates.success);
           navigateTo(context, const DriverHomeScreen());
         }
@@ -310,8 +310,9 @@ class _ReservationScreenState extends State<ReservationScreen> {
                     height: 35,
                     width: width(context, 3),
                     onPressed: () {
-                      int total =
-                          ((int.parse(numHoursSelected!) * widget.model.price!) + 15);
+                      int total = ((int.parse(numHoursSelected!) *
+                              widget.model.price!) +
+                          15);
                       print(numHoursSelected.runtimeType);
                       String today = todayDate();
                       print(total);
@@ -324,6 +325,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                           dayDate: daysSelected!,
                           numHours: numHoursSelected!,
                           total: total,
+                          days: _multiDatePickerValueWithDefaultValue.last!,
                           uidTrainer: widget.model.uid!,
                           uidDriver: driverModel.uid!,
                           driverName: driverModel.name!,

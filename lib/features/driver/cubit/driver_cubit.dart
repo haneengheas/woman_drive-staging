@@ -69,7 +69,7 @@ class DriverCubit extends Cubit<DriverState> {
 
   getTrainersData() {
     FirebaseFirestore.instance
-        .collection('trainer')
+        .collection('trainer').where('price' , isNotEqualTo: 0 )
         .get()
         .then((value) => {
               trainersData.clear(),
@@ -92,6 +92,7 @@ class DriverCubit extends Cubit<DriverState> {
       required String uidDriver,
       required String driverName,
       required String dateOfDay,
+      required DateTime days,
       required String trainerName}) {
     FirebaseFirestore.instance.collection('reservation').add({
       'hours': hours,
@@ -102,9 +103,10 @@ class DriverCubit extends Cubit<DriverState> {
       'dateOfDay': dateOfDay,
       'driverName': driverName,
       'numHours': numHours,
+      'days': days,
       'trainerName': trainerName,
       'uidTrainer': uidTrainer,
-      'rate': 1.0,
+      'rate': 0.0,
       'comment': '',
     }).then((value) {
       getReservation();
@@ -124,7 +126,7 @@ class DriverCubit extends Cubit<DriverState> {
         .doc(uidDoc)
         .set({'rate': rate, 'comment': comment}, SetOptions(merge: true)).then(
             (value) {
-              getReservation();
+      getReservation();
       emit(DriverGiveRatingSuccessState());
     }).catchError((error) {
       emit(DriverGetReservationErrorState(error.toString()));
@@ -136,56 +138,59 @@ class DriverCubit extends Cubit<DriverState> {
         .collection('reservation')
         .where('uidDriver', isEqualTo: uId)
         .where('accepted', isEqualTo: 'قيد المراجعة')
+        .where('days', isGreaterThanOrEqualTo: DateTime.now())
         .get()
         .then((value) {
       newReservationList.clear();
       for (var element in value.docs) {
         newReservationList.add(DriverReservationModel(
-          trainerName: element['trainerName'],
-          hours: element['hours'],
-          total: element['total'],
-          numHours: element['numHours'],
-          accepted: element['accepted'],
-          dateOfDay: element['dateOfDay'],
-          dayDate: element['dayDate'],
-          uidTrainer: element['uidTrainer'],
-          comment: element['comment'],
-          rate: element['rate'],
-          uidDoc: element.id,
-        ));
+            trainerName: element['trainerName'],
+            hours: element['hours'],
+            total: element['total'],
+            numHours: element['numHours'],
+            accepted: element['accepted'],
+            dateOfDay: element['dateOfDay'],
+            dayDate: element['dayDate'],
+            uidTrainer: element['uidTrainer'],
+            comment: element['comment'],
+            rate: element['rate'],
+            uidDoc: element.id,
+            days: element['days'].toDate()));
       }
     }).catchError((error) {
+      print('error.toString()');
+      print(error.toString());
       emit(DriverGetReservationErrorState(error.toString()));
     });
     FirebaseFirestore.instance
         .collection('reservation')
         .where('uidDriver', isEqualTo: uId)
         .where('accepted', isEqualTo: 'مقبول')
+        .where('days', isGreaterThanOrEqualTo: DateTime.now())
         .get()
         .then((value) {
       acceptedReservationList.clear();
       for (var element in value.docs) {
         acceptedReservationList.add(DriverReservationModel(
-          trainerName: element['trainerName'],
-          hours: element['hours'],
-          total: element['total'],
-          numHours: element['numHours'],
-          accepted: element['accepted'],
-          dateOfDay: element['dateOfDay'],
-          dayDate: element['dayDate'],
-          uidTrainer: element['uidTrainer'],
-          comment: element['comment'],
-          rate: element['rate'],
-          uidDoc: element.id,
-        ));
+            trainerName: element['trainerName'],
+            hours: element['hours'],
+            total: element['total'],
+            numHours: element['numHours'],
+            accepted: element['accepted'],
+            dateOfDay: element['dateOfDay'],
+            dayDate: element['dayDate'],
+            uidTrainer: element['uidTrainer'],
+            comment: element['comment'],
+            rate: element['rate'],
+            uidDoc: element.id,
+            days: element['days'].toDate()));
       }
     }).catchError((error) {
       emit(DriverGetReservationErrorState(error.toString()));
     });
     FirebaseFirestore.instance
         .collection('reservation')
-        .where('uidDriver', isEqualTo: uId)
-        .where('accepted', isEqualTo: 'منتهي')
+        .where('days', isLessThanOrEqualTo: DateTime.now())
         .get()
         .then((value) {
       endReservationList.clear();
@@ -202,6 +207,7 @@ class DriverCubit extends Cubit<DriverState> {
           comment: element['comment'],
           rate: element['rate'],
           uidDoc: element.id,
+          days: element['days'].toDate(),
         ));
         emit(DriverGetReservationSuccessState());
       }

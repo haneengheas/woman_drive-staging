@@ -29,13 +29,11 @@ class TrainerProfileScreen extends StatefulWidget {
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   double? showRating;
   double? avgRating;
-  List<TrainerReservationModel> ? trainerReservationList;
+  List<TrainerReservationModel>? trainerReservationList;
 
   @override
   void initState() {
-    trainerReservationList = DriverCubit
-        .get(context)
-        .trainerReservationList;
+    trainerReservationList = DriverCubit.get(context).trainerReservationList;
 
     // TODO: implement initState
     super.initState();
@@ -72,7 +70,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             body: SingleChildScrollView(
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -144,8 +142,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                               ),
                               Text(
                                 'اقبل تدريب لمن تزيد اعمارهم عن  '
-                                    '${widget.model.ageDriver}'
-                                    ' سنة ',
+                                '${widget.model.ageDriver}'
+                                ' سنة ',
                                 style: AppTextStyles.w400.apply(
                                   color: AppColors.greyDark,
                                 ),
@@ -196,12 +194,11 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           color: AppColors.pink,
                           height: 35,
                           width: width(context, 3),
-                          onPressed: () =>
-                              navigateTo(
-                                  context,
-                                  ReservationScreen(
-                                    model: widget.model,
-                                  )),
+                          onPressed: () => navigateTo(
+                              context,
+                              ReservationScreen(
+                                model: widget.model,
+                              )),
                           text: 'حجز',
                           textStyle: AppTextStyles.brButton,
                         ),
@@ -215,125 +212,133 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       color: AppColors.black,
                     ),
                     // التقييم
-                    Header(
-                      text: 'التقييم ',
-                      style: AppTextStyles.name,
-                    ),
+                    trainerReservationList!.isEmpty
+                        ? const SizedBox()
+                        : Header(
+                            text: 'التقييم ',
+                            style: AppTextStyles.name,
+                          ),
                     // التقييم
-                    Row(
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: RatingBar.builder(
+                    trainerReservationList!.isEmpty
+                        ? const SizedBox()
+                        : Row(
                             textDirection: TextDirection.rtl,
-                            initialRating
-                            : 3,
-                            minRating: 1,
-                            itemSize: 30,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemCount: 5,
-
-                            itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 2),
-                            itemBuilder: (context, _) =>
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              if (kDebugMode) {
-                                print(rating);
-                              }
-                              setState(() {
-                                showRating = rating;
-                              });
-                            },
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 25.0),
+                                child: RatingBar.builder(
+                                  textDirection: TextDirection.rtl,
+                                  initialRating: DriverCubit.get(context).rate!,
+                                  itemSize: 30,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  ignoreGestures: true,
+                                  itemCount: 5,
+                                  itemPadding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {},
+                                ),
+                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(top: 5, right: 20),
+                              //   child: Text(
+                              //     ' $showRating',
+                              //     style: AppTextStyles.name.apply(
+                              //       color: AppColors.greyDark,
+                              //     ),
+                              //   ),
+                              // )
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5, right: 20),
-                          child: Text(
-                            ' $showRating',
-                            style: AppTextStyles.name.apply(
-                              color: AppColors.greyDark,
-                            ),
+                    trainerReservationList!.isEmpty
+                        ? const SizedBox()
+                        : const Divider(
+                            height: 10,
+                            thickness: 1,
+                            endIndent: 10,
+                            indent: 10,
+                            color: AppColors.black,
                           ),
-                        )
-                      ],
-                    ),
-                    const Divider(
-                      height: 10,
-                      thickness: 1,
-                      endIndent: 10,
-                      indent: 10,
-                      color: AppColors.black,
-                    ),
                     //التعليقات
-                    Header(
-                      text: 'التعليقات',
-                      style: AppTextStyles.name,
-                    ),
+                    trainerReservationList!.isEmpty
+                        ? const SizedBox()
+                        : Header(
+                            text: 'التعليقات',
+                            style: AppTextStyles.name,
+                          ),
                     // التعليقات
                     trainerReservationList!.isEmpty
                         ? const SizedBox()
                         : SizedBox(
-                      height: height(context, 3),
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: trainerReservationList!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              // height: 100,
-                              width: width(context, 1.2),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                    color: AppColors.red, width: 1.5),
-                              ),
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                textDirection: TextDirection.rtl,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    textDirection: TextDirection.rtl,
-                                    children: [
-                                      Text(
-                                        ' ${trainerReservationList![index]
-                                            .driverName} '
-                                            ' : اسم المستخدم',
-                                        style: AppTextStyles.sName.copyWith(
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                      Text(
-                                        ' ${trainerReservationList![index]
-                                            .dateOfDay}',
-                                        style: AppTextStyles.w600,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '${trainerReservationList![index].comment}',
-                                    textDirection: TextDirection.rtl,
-                                    style: AppTextStyles.w400,
-                                  )
-                                ],
-                              ),
-                            );
-                          }),
-                    )
+                            height: height(context, 3),
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: trainerReservationList!.length,
+                                itemBuilder: (context, index) {
+                                  return trainerReservationList![index]
+                                          .comment!
+                                          .isNotEmpty
+                                      ? Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 10),
+                                          // height: 100,
+                                          width: width(context, 1.2),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                                color: AppColors.red,
+                                                width: 1.5),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            textDirection: TextDirection.rtl,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                children: [
+                                                  Text(
+                                                    ' ${trainerReservationList![index].driverName} '
+                                                    ' : اسم المستخدم',
+                                                    style: AppTextStyles.sName
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                  Text(
+                                                    ' ${trainerReservationList![index].dateOfDay}',
+                                                    style: AppTextStyles.w600,
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                '${trainerReservationList![index].comment}',
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                style: AppTextStyles.w400,
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox();
+                                }),
+                          )
                   ],
                 ),
               ),

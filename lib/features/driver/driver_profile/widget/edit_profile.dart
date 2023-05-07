@@ -11,6 +11,7 @@ Future editProfile({
   required DriverModel model,
   required BuildContext context,
 }) {
+  final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController(text: model.name);
   final emailController = TextEditingController(text: model.email);
   final ageController = TextEditingController(text: model.age);
@@ -32,34 +33,62 @@ Future editProfile({
           content: SingleChildScrollView(
             child: SizedBox(
               width: width(context, 1),
-              child: Column(
-                children: [
-                  TextFieldTemplate(
-                    hintText: 'الاسم',
-                    icon: Icons.person,
-                    controller: nameController,
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'البريد الالكتروني',
-                    icon: Icons.email,
-                    controller: emailController,
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'رقم الهاتف',
-                    icon: Icons.phone,
-                    controller: phoneController,
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'العمر',
-                    icon: Icons.calendar_month,
-                    controller: ageController,
-                  ),
-                  TextFieldTemplate(
-                    hintText: 'العنوان',
-                    icon: Icons.home,
-                    controller: addressController,
-                  ),
-                ],
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFieldTemplate(
+                      hintText: 'الاسم',
+                      icon: Icons.person,
+                      controller: nameController,
+                    ),
+                    TextFieldTemplate(
+                      hintText: 'البريد الالكتروني',
+                      icon: Icons.email,
+                      controller: emailController,
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'برجاء كتابه البريد الإلكتروني ';
+                        } else if (value.length < 5) {
+                          return 'برجاء كتابه البريد الإلكتروني بشكل صحيح';
+                        } else if (!value.toString().contains('@')) {
+                          return ' @ يجب ان يحتوي البريد الإلكتروني علي  ';
+                        }
+                      },
+                    ),
+                    TextFieldTemplate(
+                      hintText: 'رقم الهاتف',
+                      icon: Icons.phone,
+                      controller: phoneController,
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'برجاء ادخال رقم الهاتف';
+                        }
+                      },
+                    ),
+                    TextFieldTemplate(
+                      hintText: 'العمر',
+                      icon: Icons.calendar_month,
+                      controller: ageController,
+
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'برجاء ادخال العمر';
+                        }
+                      },
+                    ),
+                    TextFieldTemplate(
+                      hintText: 'العنوان',
+                      icon: Icons.home,
+                      controller: addressController,
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return 'برجاء ادخال العنوان';
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -79,6 +108,7 @@ Future editProfile({
                         phone: phoneController.text,
                         address: addressController.text);
                     Navigator.pop(context);
+
                   },
                   text: 'تأكيد',
                   textStyle: AppTextStyles.button,

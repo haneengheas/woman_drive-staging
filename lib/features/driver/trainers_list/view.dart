@@ -23,14 +23,9 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
     return BlocConsumer<DriverCubit, DriverState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var model = DriverCubit
-              .get(context)
-              .model;
+          var model = DriverCubit.get(context).model;
           return ConditionalBuilder(
-              condition: DriverCubit
-                  .get(context)
-                  .trainersData
-                  .isNotEmpty,
+              condition: DriverCubit.get(context).trainersData.isNotEmpty,
               builder: (context) {
                 return SafeArea(
                   child: Scaffold(
@@ -49,31 +44,27 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                       child: GridView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
-                        itemCount: DriverCubit
-                            .get(context)
-                            .trainersData
-                            .length,
+                        itemCount: DriverCubit.get(context).trainersData.length,
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5),
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
                             onTap: () {
                               DriverCubit.get(context)
                                   .getTrainerReservationComment(
-                                  uidTrainer: DriverCubit
-                                      .get(context)
-                                      .trainersData[index].uid!);
-                              print(DriverCubit
-                                  .get(context)
-                                  .trainersData[index].name);
+                                      uidTrainer: DriverCubit.get(context)
+                                          .trainersData[index]
+                                          .uid!);
+                              print(DriverCubit.get(context)
+                                  .trainersData[index]
+                                  .name);
                               navigateTo(
                                   context,
                                   TrainerProfileScreen(
-                                      model: DriverCubit
-                                          .get(context)
+                                      model: DriverCubit.get(context)
                                           .trainersData[index],
                                       image: woman1));
                             },
@@ -104,9 +95,7 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                                       height: 20,
                                     ),
                                     Text(
-                                      '${DriverCubit
-                                          .get(context)
-                                          .trainersData[index].name}',
+                                      '${DriverCubit.get(context).trainersData[index].name}',
                                       style: AppTextStyles.name.apply(
                                           color: index.isEven
                                               ? AppColors.green
@@ -124,12 +113,20 @@ class _TrainerListScreenState extends State<TrainerListScreen> {
                 );
               },
               fallback: (context) {
-                return const Scaffold(
-                  body: LinearProgressIndicator(),
+                return  Scaffold(
+                  appBar: AppBar(
+                    title: const Text(
+                      'المدربين',
+                    ),
+                    leading: IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_outlined,
+                        )),
+                  ),
+                  body: const SizedBox(),
                 );
               });
         });
   }
 }
-
-

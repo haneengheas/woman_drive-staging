@@ -144,7 +144,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         color: AppColors.yellow,
                         onPressed: () {
                           print('++++++');
-                          // DriverCubit.get(context).getReservation();
+                           DriverCubit.get(context).getReservation();
                           navigateTo(context, const ReservationListScreen());
                         },
                         minwidth: width(context, 1.7),

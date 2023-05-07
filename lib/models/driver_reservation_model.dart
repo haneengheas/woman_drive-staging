@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DriverReservationModel {
   String? trainerName;
   String? uidTrainer;
@@ -11,6 +13,7 @@ class DriverReservationModel {
   String ? uidDoc;
   String ? comment;
   double ? rate ;
+  DateTime ? days ;
 
 
   DriverReservationModel({
@@ -24,7 +27,8 @@ class DriverReservationModel {
     this.numHours,
     this.uidDoc,
     this.comment,
-    this.rate
+    this.rate,
+    this.days,
 
   });
 
@@ -40,6 +44,7 @@ class DriverReservationModel {
     uidDoc = json['uidDoc'];
     comment = json['comment'];
     rate = json['rate'];
+    days = json['days'];
 
   }
 
@@ -56,6 +61,7 @@ class DriverReservationModel {
       'uidDoc': uidDoc,
       'comment': comment,
       'rate': rate,
+      'days': days
 
     };
   }

@@ -218,8 +218,10 @@ class _TrainerInfoScreenState extends State<TrainerInfoScreen> {
                     config: CalendarDatePicker2Config(
                       calendarType: CalendarDatePicker2Type.multi,
                       selectedDayHighlightColor: AppColors.yellow,
+
                     ),
                     value: datesList,
+
                     onValueChanged: (dates) => setState(() {
                       datesList = dates;
                       print(datesList);
