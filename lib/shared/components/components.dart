@@ -145,7 +145,8 @@ class TextFieldTemplate extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               disabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.black, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+                  borderRadius: BorderRadius.all(Radius.circular(15)))
+          ),
         ),
       ),
     );

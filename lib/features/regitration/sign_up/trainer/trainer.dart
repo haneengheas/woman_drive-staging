@@ -127,8 +127,10 @@ class _TrainerRegisterScreenState extends State<TrainerRegisterScreen> {
                             validator: (String? value) {
                               if (value!.isEmpty) {
                                 return 'برجاء ادخال رقم الهوية';
-                              } else if (value.length < 11) {
-                                return 'يحب ان يتكون رقم الهوية علي الاقل من 11 رقم';
+                              } else if (value.length < 10 ) {
+                                return 'يحب ان يتكون رقم الهوية علي الاقل من 10 رقم';
+                              }else if (value.length > 10 ) {
+                                return 'يحب ان يتكون رقم الهوية علي الاكثر من 10 رقم';
                               }
                             },
                           ),

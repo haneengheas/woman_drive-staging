@@ -30,15 +30,7 @@ class ReservationScreen extends StatefulWidget {
 class _ReservationScreenState extends State<ReservationScreen> {
   late List<DateTime?> datesList = [];
 
-  List<String> days = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-  ];
+
   List<String> hoursNum = [
     '1',
     '2',
